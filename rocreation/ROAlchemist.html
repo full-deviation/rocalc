@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta name="author" content="まじぽた"/>
+	<meta name="description" content="Ragnarok Online(RO)のアルケミストおよびジェネティックの製造スキル(ファーマシー、スペシャルファーマシー、ミックスクッキング、爆弾製造)による成功率と原価を計算します。"/>
+	<meta name="keywords" content="RO,Ragnarok Online,ラグナロクオンライン,計算機,製薬,アルケミスト,ジェネティック,ファーマシー,スペシャルファーマシー,ミックスクッキング,爆弾製造"/>
+	<title>RO製造計算機 - アルケミスト系列 - まじぽたさんすう</title>
+	<script src="external/jquery.min.js"></script>
+	<script src="external/jquery.cookie.min.js"></script>
+	<script src="external/jquery-ui.min.js"></script>
+	<script src="ROAlchemist.js"></script>
+	<link href="external/jquery-ui.min.css" rel="stylesheet"/>
+	<link href="ROCreation.css" rel="stylesheet"/>
+</head>
+<body>
+	<h1>RO製造計算機 - アルケミスト系列</h1>
+
+	<div align="right">
+		<select id="jumpMenu">
+			<option value="ROAlchemist.html" selected="selected">アルケミスト系列</option>
+			<option value="ROAssassin.html">アサシン系列</option>
+			<option value="ROKnight.html">ナイト系列</option>
+			<option value="ROBlacksmith.html">ブラックスミス系列</option>
+			<option value="ROCooking.html">料理</option>
+		</select>
+		<a id="to-Top" href="https://magipota.gozaru.jp/">トップに戻る</a>
+	</div>
+
+	<div><button id="saveButton">入力内容を保存</button></div>
+	<div id="mainTabs">
+		<ul>
+			<li><a href="#mainTabs-Param">パラメータ</a></li>
+			<li><a href="#mainTabs-Pharmacy">ファーマシー</a></li>
+			<li><a href="#mainTabs-SpecialPharmacy">スペシャルファーマシー</a></li>
+			<li><a href="#mainTabs-MixedCooking">ミックスクッキング</a></li>
+			<li><a href="#mainTabs-BombCreation">爆弾製造</a></li>
+			<li><a href="#mainTabs-Cost">原価</a></li>
+			<li><a href="#mainTabs-About">About</a></li>
+		</ul>
+
+		<!-- パラメータ タブ -->
+		<div id="mainTabs-Param">
+			<table>
+				<thead>
+					<tr><th>項目</th>
+						<th>基本</th>
+						<th>補正</th></tr>
+				<thead>
+				<tbody>
+					<tr>
+						<td class="identify">BaseLv</td>
+						<td><input id="p_BaseLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td class="identify">JobLv</td>
+						<td><input id="p_JobLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td class="identify">INT</td>
+						<td><input id="p_BaseINT" class="numeric"/></td>
+						<td>＋ <input id="p_AddINT" class="numeric"/></td>
+					</tr>
+
+					<tr>
+						<td class="identify">DEX</td>
+						<td><input id="p_BaseDEX" class="numeric"/></td>
+						<td>＋ <input id="p_AddDEX" class="numeric"/></td>
+					</tr>
+
+					<tr>
+						<td class="identify">LUK</td>
+						<td><input id="p_BaseLUK" class="numeric"/></td>
+						<td>＋ <input id="p_AddLUK" class="numeric"/></td>
+					</tr>
+
+					<tr>
+						<td class="identify">ラーニングポーション</td>
+						<td><input id="p_LearningPotionLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td class="identify">ファーマシー</td>
+						<td><input id="p_PharmacyLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td class="identify">スペシャルファーマシー</td>
+						<td><input id="p_SpecialPharmacyLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td class="identify">フルケミカルチャージ</td>
+						<td><input id="p_FullChemicalChargeLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td class="identify">チェンジインストラクション</td>
+						<td><input id="p_ChangeInstructionLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td class="identify">ミックスクッキング</td>
+						<td><input id="p_MixedCookingLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td class="identify">爆弾製造</td>
+						<td><input id="p_BombCreationLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td class="identify">ワールド</td>
+						<td>
+							<select id="p_World">
+								<option value="1">Sigrun</option>
+								<option value="2">Alvitr</option>
+								<option value="3">Vali</option>
+								<option value="4">Trudr</option>
+								<option value="5">Radgrid</option>
+								<option value="6">Olrun</option>
+								<option value="7">Gimle</option>
+								<option value="8">Hervor</option>
+								<option value="9">Idavoll</option>
+								<option value="10">Frigg</option>
+								<option value="11">Mimir</option>
+								<option value="12">Lif</option>
+								<option value="13">Breidablik</option>
+								<option value="14">Urdr</option>
+								<option value="15">Noatun</option>
+							</select>
+						</td>
+						<td>← アイテム名リンク用</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- ファーマシー タブ -->
+		<div id="mainTabs-Pharmacy">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>アイテム補正</th>
+						<th>成功率(%)</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify from_npc"><a id="p_PharmacyItemName_0" href="https://rotool.gungho.jp/torihiki/index.php?item=501&world=15" target="_blank">赤ポーション</a></td>
+						<td id="p_PharmacyItemRates_0"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_0" class="numeric">-</td>
+						<td id="p_PharmacyCost_0"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a id="p_PharmacyItemName_1" href="https://rotool.gungho.jp/torihiki/index.php?item=503&world=15" target="_blank">黄ポーション</a></td>
+						<td id="p_PharmacyItemRates_1"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_1" class="numeric">-</td>
+						<td id="p_PharmacyCost_1"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a id="p_PharmacyItemName_2" href="https://rotool.gungho.jp/torihiki/index.php?item=504&world=15" target="_blank">白ポーション</a></td>
+						<td id="p_PharmacyItemRates_2"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_2" class="numeric">-</td>
+						<td id="p_PharmacyCost_2"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a id="p_PharmacyItemName_3" href="https://rotool.gungho.jp/torihiki/index.php?item=505&world=15" target="_blank">青ポーション</a></td>
+						<td id="p_PharmacyItemRates_3"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_3" class="numeric">-</td>
+						<td id="p_PharmacyCost_3"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_4" href="https://rotool.gungho.jp/torihiki/index.php?item=605&world=15" target="_blank">アンティペインメント</a></td>
+						<td id="p_PharmacyItemRates_4"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_4" class="numeric">-</td>
+						<td id="p_PharmacyCost_4"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_5" href="https://rotool.gungho.jp/torihiki/index.php?item=606&world=15" target="_blank">アロエベラ</a></td>
+						<td id="p_PharmacyItemRates_5"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_5" class="numeric">-</td>
+						<td id="p_PharmacyCost_5"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_6" href="https://rotool.gungho.jp/torihiki/index.php?item=7142&world=15" target="_blank">エンブリオ</a></td>
+						<td id="p_PharmacyItemRates_6"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_6" class="numeric">-</td>
+						<td id="p_PharmacyCost_6"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_7" href="https://rotool.gungho.jp/torihiki/index.php?item=545&world=15" target="_blank">レッドスリムポーション</a></td>
+						<td id="p_PharmacyItemRates_7"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_7" class="numeric">-</td>
+						<td id="p_PharmacyCost_7"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_8" href="https://rotool.gungho.jp/torihiki/index.php?item=546&world=15" target="_blank">イエロースリムポーション</a></td>
+						<td id="p_PharmacyItemRates_8"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_8" class="numeric">-</td>
+						<td id="p_PharmacyCost_8"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_9" href="https://rotool.gungho.jp/torihiki/index.php?item=547&world=15" target="_blank">ホワイトスリムポーション</a></td>
+						<td id="p_PharmacyItemRates_9"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_9" class="numeric">-</td>
+						<td id="p_PharmacyCost_9"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_10" href="https://rotool.gungho.jp/torihiki/index.php?item=970&world=15" target="_blank">アルコール</a></td>
+						<td id="p_PharmacyItemRates_10"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_10" class="numeric">-</td>
+						<td id="p_PharmacyCost_10"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_11" href="https://rotool.gungho.jp/torihiki/index.php?item=7135&world=15" target="_blank">ファイアーボトル</a></td>
+						<td id="p_PharmacyItemRates_11"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_11" class="numeric">-</td>
+						<td id="p_PharmacyCost_11"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_12" href="https://rotool.gungho.jp/torihiki/index.php?item=7136&world=15" target="_blank">アシッドボトル</a></td>
+						<td id="p_PharmacyItemRates_12"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_12" class="numeric">-</td>
+						<td id="p_PharmacyCost_12"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_13" href="https://rotool.gungho.jp/torihiki/index.php?item=7137&world=15" target="_blank">プラントボトル</a></td>
+						<td id="p_PharmacyItemRates_13"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_13" class="numeric">-</td>
+						<td id="p_PharmacyCost_13"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_14" href="https://rotool.gungho.jp/torihiki/index.php?item=7138&world=15" target="_blank">マインボトル</a></td>
+						<td id="p_PharmacyItemRates_14"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_14" class="numeric">-</td>
+						<td id="p_PharmacyCost_14"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_15" href="https://rotool.gungho.jp/torihiki/index.php?item=7139&world=15" target="_blank">コーティング薬</a></td>
+						<td id="p_PharmacyItemRates_15"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_15" class="numeric">-</td>
+						<td id="p_PharmacyCost_15"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_16" href="https://rotool.gungho.jp/torihiki/index.php?item=12118&world=15" target="_blank">レジストファイアーポーション</a></td>
+						<td id="p_PharmacyItemRates_16"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_16" class="numeric">-</td>
+						<td id="p_PharmacyCost_16"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_17" href="https://rotool.gungho.jp/torihiki/index.php?item=12119&world=15" target="_blank">レジストコールドポーション</a></td>
+						<td id="p_PharmacyItemRates_17"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_17" class="numeric">-</td>
+						<td id="p_PharmacyCost_17"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_18" href="https://rotool.gungho.jp/torihiki/index.php?item=12121&world=15" target="_blank">レジストウィンドポーション</a></td>
+						<td id="p_PharmacyItemRates_18"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_18" class="numeric">-</td>
+						<td id="p_PharmacyCost_18"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_PharmacyItemName_19" href="https://rotool.gungho.jp/torihiki/index.php?item=12120&world=15" target="_blank">レジストアースポーション</a></td>
+						<td id="p_PharmacyItemRates_19"   class="numeric">-</td>
+						<td id="p_PharmacyBrewingRate_19" class="numeric">-</td>
+						<td id="p_PharmacyCost_19"        class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>[(ファーマシーLv × 3) ＋ ラーニングポーションLv ＋ チェンジインストラクションLv ＋ (JobLv × 0.2) ＋ (DEX × 0.1) ＋ (LUK × 0.1) ＋ (INT × 0.05) ＋ アイテム補正 － 5]%</div>
+		</div>
+
+		<!-- スペシャルファーマシー タブ -->
+		<div id="mainTabs-SpecialPharmacy">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr><th>アイテム</th>
+						<th>アイテム補正</th>
+						<th id="p_SpecialPharmacy_Plus6_Header">+6個(%)</th>
+						<th id="p_SpecialPharmacy_Plus3_Header">+3個(%)</th>
+						<th id="p_SpecialPharmacy_Plus2_Header">+2個(%)</th>
+						<th id="p_SpecialPharmacy_Plus1_Header">+1個(%)</th>
+						<th id="p_SpecialPharmacy_Plus0_Header">+0個(%)</th>
+						<th>平均(個)</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_0" href="https://rotool.gungho.jp/torihiki/index.php?item=6210&world=15" target="_blank">茨の種</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_0"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_0"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_0"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_0"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_0"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_0"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_0" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_0"  class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_1" href="https://rotool.gungho.jp/torihiki/index.php?item=6211&world=15" target="_blank">吸血植物の種</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_1"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_1"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_1"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_1"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_1"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_1"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_1" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_1"  class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_2" href="https://rotool.gungho.jp/torihiki/index.php?item=6212&world=15" target="_blank">爆弾キノコの胞子</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_2"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_2"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_2"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_2"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_2"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_2"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_2" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_2"  class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_3" href="https://rotool.gungho.jp/torihiki/index.php?item=12428&world=15" target="_blank">濃縮ホワイトポーションZ</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_3"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_3"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_3"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_3"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_3"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_3"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_3" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_3"  class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_4" href="https://rotool.gungho.jp/torihiki/index.php?item=12436&world=15" target="_blank">ビタタ500</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_4"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_4"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_4"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_4"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_4"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_4"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_4" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_4"  class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_5" href="https://rotool.gungho.jp/torihiki/index.php?item=12437&world=15" target="_blank">濃縮サラマインジュース</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_5"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_5"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_5"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_5"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_5"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_5"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_5" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_5"  class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_6" href="https://rotool.gungho.jp/torihiki/index.php?item=12475&world=15" target="_blank">キュアーフリー</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_6"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_6"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_6"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_6"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_6"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_6"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_6" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_6"  class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_7" href="https://rotool.gungho.jp/torihiki/index.php?item=12422&world=15" target="_blank">HP増加ポーション(小)</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_7"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_7"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_7"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_7"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_7"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_7"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_7" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_7" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_8" href="https://rotool.gungho.jp/torihiki/index.php?item=12423&world=15" target="_blank">HP増加ポーション(中)</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_8"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_8"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_8"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_8"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_8"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_8"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_8" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_8" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_9" href="https://rotool.gungho.jp/torihiki/index.php?item=12424&world=15" target="_blank">HP増加ポーション(大)</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_9"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_9"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_9"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_9"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_9"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_9"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_9" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_9" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_10" href="https://rotool.gungho.jp/torihiki/index.php?item=12425&world=15" target="_blank">SP増加ポーション(小)</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_10"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_10"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_10"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_10"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_10"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_10"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_10" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_10" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_11" href="https://rotool.gungho.jp/torihiki/index.php?item=12426&world=15" target="_blank">SP増加ポーション(中)</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_11"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_11"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_11"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_11"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_11"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_11"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_11" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_11" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_SpecialPharmacyItemName_12" href="https://rotool.gungho.jp/torihiki/index.php?item=12427&world=15" target="_blank">SP増加ポーション(大)</a></td>
+						<td><input id="p_SpecialPharmacyItemRates_12"    class="numeric"/></td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus6_12"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus3_12"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus2_12"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus1_12"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Plus0_12"   class="numeric">-</td>
+						<td id="p_SpecialPharmacyBrewingRate_Average_12" class="numeric">-</td>
+						<td id="p_SpecialPharmacyCost_12" class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>
+				<p>
+					<div>製造 ＝ INT ＋ (DEX ÷ 2) ＋ LUK ＋ JobLv ＋ Random[30,150] ＋ (BaseLv － 100) ＋ (ラーニングポーションLv × 5) + (フルケミカルチャージLv × Random[4,10])</div>
+					<div>難度 ＝ 620 － (スペシャルファーマシーLv × 20) ＋ アイテム補正</div>
+					<div>最低保証個数 ＝ Floor[1 ＋ (スペシャルファーマシーLv × 0.5)]</div>
+				</p>
+				<ul>
+					<li>製造 － 難度 ＞ 400 … 最低保証個数 ＋ 6</li>
+					<li>製造 － 難度 ＞ 300 … 最低保証個数 ＋ 3</li>
+					<li>製造 － 難度 ＞ 100 … 最低保証個数 ＋ 2</li>
+					<li>製造 － 難度 ＞ 1 … 最低保証個数 ＋ 1</li>
+					<li>上記以外 … 最低保証個数</li>
+				</ul>
+			</div>
+		</div>
+
+		<!-- ミックスクッキング タブ -->
+		<div id="mainTabs-MixedCooking">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>アイテム補正</th>
+						<th>10～12個(%)</th>
+						<th>10個(%)</th>
+						<th>8個(%)</th>
+						<th>5個(%)</th>
+						<th>1個(%)</th>
+						<th>失敗(%)</th>
+						<th>平均(個)</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_MixedCookingItemName_0" href="https://rotool.gungho.jp/torihiki/index.php?item=12429&world=15" target="_blank">サベージの丸焼き</a></td>
+						<td><input id="p_MixedCookingItemRates_0"    class="numeric"/></td>
+						<td id="p_MixedCookingBrewingRate_Count11_0" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count10_0" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count8_0"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count5_0"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count1_0"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count0_0"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Average_0" class="numeric">-</td>
+						<td id="p_MixedCookingCost_0"                class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_MixedCookingItemName_1" href="https://rotool.gungho.jp/torihiki/index.php?item=12433&world=15" target="_blank">ドロセラのハーブ煮</a></td>
+						<td><input id="p_MixedCookingItemRates_1"    class="numeric"/></td>
+						<td id="p_MixedCookingBrewingRate_Count11_1" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count10_1" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count8_1"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count5_1"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count1_1"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count0_1"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Average_1" class="numeric">-</td>
+						<td id="p_MixedCookingCost_1"                class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_MixedCookingItemName_2" href="https://rotool.gungho.jp/torihiki/index.php?item=12431&world=15" target="_blank">ミノタウロスのカルビ</a></td>
+						<td><input id="p_MixedCookingItemRates_2"    class="numeric"/></td>
+						<td id="p_MixedCookingBrewingRate_Count11_2" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count10_2" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count8_2"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count5_2"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count1_2"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count0_2"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Average_2" class="numeric">-</td>
+						<td id="p_MixedCookingCost_2"                class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_MixedCookingItemName_3" href="https://rotool.gungho.jp/torihiki/index.php?item=12430&world=15" target="_blank">カクテルウォーグブラッド</a></td>
+						<td><input id="p_MixedCookingItemRates_3"    class="numeric"/></td>
+						<td id="p_MixedCookingBrewingRate_Count11_3" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count10_3" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count8_3"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count5_3"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count1_3"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count0_3"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Average_3" class="numeric">-</td>
+						<td id="p_MixedCookingCost_3"                class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_MixedCookingItemName_4" href="https://rotool.gungho.jp/torihiki/index.php?item=12432&world=15" target="_blank">シロマアイスティー</a></td>
+						<td><input id="p_MixedCookingItemRates_4"    class="numeric"/></td>
+						<td id="p_MixedCookingBrewingRate_Count11_4" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count10_4" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count8_4"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count5_4"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count1_4"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count0_4"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Average_4" class="numeric">-</td>
+						<td id="p_MixedCookingCost_4"                class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_MixedCookingItemName_5" href="https://rotool.gungho.jp/torihiki/index.php?item=12434&world=15" target="_blank">プティットのしっぽ麺</a></td>
+						<td><input id="p_MixedCookingItemRates_5"    class="numeric"/></td>
+						<td id="p_MixedCookingBrewingRate_Count11_5" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count10_5" class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count8_5"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count5_5"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count1_5"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Count0_5"  class="numeric">-</td>
+						<td id="p_MixedCookingBrewingRate_Average_5" class="numeric">-</td>
+						<td id="p_MixedCookingCost_5"                class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>製造 ＝ (JobLv ÷ 4) ＋ (DEX ÷ 3) ＋ (LUK ÷ 2)</div>
+			<div>難度 ＝ Random[30,150] ＋ アイテム補正</div>
+
+			<div>Lv1</div>
+			<ul>
+				<li>製造 － 難度 ＞ 0 … 1個</li>
+				<li>上記以外 … 失敗</li>
+			</ul>
+
+			<div>Lv2</div>
+			<ul>
+				<li>製造 － 難度 ＞ 30 … 10～12個</li>
+				<li>製造 － 難度 ＞ 10 … 10個</li>
+				<li>製造 － 難度 ≧ -10 … 8個</li>
+				<li>製造 － 難度 ＞ -30 … 5個</li>
+				<li>製造 － 難度 ＜ -50 … 失敗</li>
+			</ul>
+			<div>※消費材料は10個分</div>
+		</div>
+
+		<!-- 爆弾製造 タブ -->
+		<div id="mainTabs-BombCreation">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>アイテム補正</th>
+						<th>10～12個(%)</th>
+						<th>10個(%)</th>
+						<th>8個(%)</th>
+						<th>5個(%)</th>
+						<th>1個(%)</th>
+						<th>失敗(%)</th>
+						<th>平均(個)</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_BombCreationItemName_0" href="https://rotool.gungho.jp/torihiki/index.php?item=13260&world=15" target="_blank">リンゴ爆弾</a></td>
+						<td><input id="p_BombCreationItemRates_0"    class="numeric"/></td>
+						<td id="p_BombCreationBrewingRate_Count11_0" class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count10_0" class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count8_0"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count5_0"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count1_0"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count0_0"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Average_0" class="numeric">-</td>
+						<td id="p_BombCreationCost_0"                class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_BombCreationItemName_1" href="https://rotool.gungho.jp/torihiki/index.php?item=13264&world=15" target="_blank">バナナ爆弾</a></td>
+						<td><input id="p_BombCreationItemRates_1"    class="numeric"/></td>
+						<td id="p_BombCreationBrewingRate_Count11_1" class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count10_1" class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count8_1"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count5_1"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count1_1"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count0_1"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Average_1" class="numeric">-</td>
+						<td id="p_BombCreationCost_1"                class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_BombCreationItemName_2" href="https://rotool.gungho.jp/torihiki/index.php?item=13262&world=15" target="_blank">メロン爆弾</a></td>
+						<td><input id="p_BombCreationItemRates_2"    class="numeric"/></td>
+						<td id="p_BombCreationBrewingRate_Count11_2" class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count10_2" class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count8_2"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count5_2"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count1_2"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count0_2"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Average_2" class="numeric">-</td>
+						<td id="p_BombCreationCost_2"                class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_BombCreationItemName_3" href="https://rotool.gungho.jp/torihiki/index.php?item=13263&world=15" target="_blank">パイナップル爆弾</a></td>
+						<td><input id="p_BombCreationItemRates_3"    class="numeric"/></td>
+						<td id="p_BombCreationBrewingRate_Count11_3" class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count10_3" class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count8_3"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count5_3"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count1_3"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count0_3"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Average_3" class="numeric">-</td>
+						<td id="p_BombCreationCost_3"                class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_BombCreationItemName_4" href="https://rotool.gungho.jp/torihiki/index.php?item=13261&world=15" target="_blank">ココナッツ爆弾</a></td>
+						<td><input id="p_BombCreationItemRates_4"    class="numeric"/></td>
+						<td id="p_BombCreationBrewingRate_Count11_4" class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count10_4" class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count8_4"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count5_4"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count1_4"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Count0_4"  class="numeric">-</td>
+						<td id="p_BombCreationBrewingRate_Average_4" class="numeric">-</td>
+						<td id="p_BombCreationCost_4"                class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>製造 ＝ (JobLv ÷ 4) ＋ (DEX ÷ 3) ＋ (LUK ÷ 2)</div>
+			<div>難度 ＝ Random[30,150] ＋ アイテム補正</div>
+
+			<div>Lv1</div>
+			<ul>
+				<li>製造 － 難度 ＞ 0 … 1個</li>
+				<li>上記以外 … 失敗</li>
+			</ul>
+
+			<div>Lv2</div>
+			<ul>
+				<li>製造 － 難度 ＞ 30 … 10～12個</li>
+				<li>製造 － 難度 ＞ 10 … 10個</li>
+				<li>製造 － 難度 ≧ -10 … 8個</li>
+				<li>製造 － 難度 ＞ -30 … 5個</li>
+				<li>製造 － 難度 ＜ -50 … 失敗</li>
+			</ul>
+			<div>※消費材料は10個分</div>
+		</div>
+
+		<!-- 原価 タブ -->
+		<div id="mainTabs-Cost">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr><th>アイテム</th>
+						<th>価格(Zeny)</th>
+						<th>アイテム</th>
+						<th>価格(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=510&world=15"  target="_blank">青ハーブ</a></td><td><input id="p_Cost_0" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=507&world=15"  target="_blank">赤ハーブ</a></td><td><input id="p_Cost_1" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=501"  target="_blank">赤ポーション</a></td><td><input id="p_Cost_2" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=713&world=15"  target="_blank">空きビン</a></td><td><input id="p_Cost_3" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=970&world=15"  target="_blank">アルコール</a></td><td><input id="p_Cost_4" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=704&world=15"  target="_blank">アロエ</a></td><td><input id="p_Cost_5" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=715&world=15"  target="_blank">イエロージェムストーン</a></td><td><input id="p_Cost_6" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7141" target="_blank">イグドラシルの露</a></td><td><input id="p_Cost_7" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=610"  target="_blank">イグドラシルの葉</a></td><td><input id="p_Cost_8" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=6252&world=15" target="_blank">狼の血</a></td><td><input id="p_Cost_9" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=6255" target="_blank">大きい鍋</a></td><td><input id="p_Cost_10" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1057&world=15" target="_blank">蛾の羽粉</a></td><td><input id="p_Cost_11" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7001&world=15" target="_blank">カビの粉</a></td><td><input id="p_Cost_12" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=1092" target="_blank">空の試験管</a></td><td><input id="p_Cost_13" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=1093" target="_blank">空のポーション瓶</a></td><td><input id="p_Cost_14" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=6244&world=15" target="_blank">ガンパウダー</a></td><td><input id="p_Cost_15" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=921&world=15"  target="_blank">きのこの胞子</a></td><td><input id="p_Cost_16" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=508&world=15"  target="_blank">黄ハーブ</a></td><td><input id="p_Cost_17" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=503"  target="_blank">黄ポーション</a></td><td><input id="p_Cost_18" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=6254&world=15" target="_blank">牛カルビ</a></td><td><input id="p_Cost_19" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1050&world=15" target="_blank">血管</a></td><td><input id="p_Cost_20" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=6257&world=15" target="_blank">氷の結晶</a></td><td><input id="p_Cost_21" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=6256&world=15" target="_blank">氷の破片</a></td><td><input id="p_Cost_22" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=6251" target="_blank">黒炭</a></td><td><input id="p_Cost_23" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=6263&world=15" target="_blank">ココナッツの実</a></td><td><input id="p_Cost_24" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=6248" target="_blank">ごった煮の壺</a></td><td><input id="p_Cost_25" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=6249&world=15" target="_blank">サベージの肉</a></td><td><input id="p_Cost_26" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=952&world=15"  target="_blank">サボテンの針</a></td><td><input id="p_Cost_27" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7143" target="_blank">飼育ポット</a></td><td><input id="p_Cost_28" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1033&world=15" target="_blank">食人植物の根</a></td><td><input id="p_Cost_29" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1032&world=15" target="_blank">食人植物の花</a></td><td><input id="p_Cost_30" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=905&world=15"  target="_blank">植物の茎</a></td><td><input id="p_Cost_31" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=509&world=15"  target="_blank">白ハーブ</a></td><td><input id="p_Cost_32" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=504"  target="_blank">白ポーション</a></td><td><input id="p_Cost_33" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=645"  target="_blank">スピードアップポーション</a></td><td><input id="p_Cost_34" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=523&world=15"  target="_blank">聖水</a></td><td><input id="p_Cost_35" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7140" target="_blank">生命の種</a></td><td><input id="p_Cost_36" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1044&world=15" target="_blank">ゼノークの歯</a></td><td><input id="p_Cost_37" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=911"  target="_blank">セルー</a></td><td><input id="p_Cost_38" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=6261" target="_blank">素麺</a></td><td><input id="p_Cost_39" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=6253&world=15" target="_blank">冷たい氷</a></td><td><input id="p_Cost_40" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=6262" target="_blank">冷たい出汁</a></td><td><input id="p_Cost_41" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7126&world=15" target="_blank">でっかいゼロピー</a></td><td><input id="p_Cost_42" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1059&world=15" target="_blank">透明な布</a></td><td><input id="p_Cost_43" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1012&world=15" target="_blank">トカゲの襟巻</a></td><td><input id="p_Cost_44" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7033&world=15" target="_blank">毒キノコの胞子</a></td><td><input id="p_Cost_45" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=576&world=15"  target="_blank">トゲの実</a></td><td><input id="p_Cost_46" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=929&world=15"  target="_blank">止まらない心臓</a></td><td><input id="p_Cost_47" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=6259&world=15" target="_blank">ドロセラの触手</a></td><td><input id="p_Cost_48" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=6258" target="_blank">トロピカルフルーツ</a></td><td><input id="p_Cost_49" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7134" target="_blank">乳鉢</a></td><td><input id="p_Cost_50" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=950&world=15"  target="_blank">人魚の心臓</a></td><td><input id="p_Cost_51" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=656"  target="_blank">ハイスピードポーション</a></td><td><input id="p_Cost_52" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=6265" target="_blank">パイナップル</a></td><td><input id="p_Cost_53" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=528"  target="_blank">化け物のエサ</a></td><td><input id="p_Cost_54" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=518&world=15"  target="_blank">ハチ蜜</a></td><td><input id="p_Cost_55" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=513"  target="_blank">バナナ</a></td><td><input id="p_Cost_56" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=525"  target="_blank">万能薬</a></td><td><input id="p_Cost_57" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=6260&world=15" target="_blank">プティットの尻尾</a></td><td><input id="p_Cost_58" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=514&world=15"  target="_blank">ブドウ</a></td><td><input id="p_Cost_59" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=717"  target="_blank">ブルージェムストーン</a></td><td><input id="p_Cost_60" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=938&world=15"  target="_blank">べとべとする液体</a></td><td><input id="p_Cost_61" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1061&world=15" target="_blank">魔女の星の砂</a></td><td><input id="p_Cost_62" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=522"  target="_blank">マステラの実</a></td><td><input id="p_Cost_63" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=511&world=15"  target="_blank">緑ハーブ</a></td><td><input id="p_Cost_64" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=6264" target="_blank">メロン</a></td><td><input id="p_Cost_65" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=708&world=15"  target="_blank">メント</a></td><td><input id="p_Cost_66" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1017&world=15" target="_blank">土竜のひげ</a></td><td><input id="p_Cost_67" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1051&world=15" target="_blank">雷管</a></td><td><input id="p_Cost_68" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=6250" target="_blank">料理用鉄串</a></td><td><input id="p_Cost_69" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=512"  target="_blank">リンゴ</a></td><td><input id="p_Cost_70" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=716&world=15"  target="_blank">レッドジェムストーン</a></td><td><input id="p_Cost_71" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=568"  target="_blank">レモン</a></td><td><input id="p_Cost_72" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=526&world=15"  target="_blank">ローヤルゼリー</a></td><td><input id="p_Cost_73" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7453"  target="_blank">甘口ソース</a></td><td><input id="p_Cost_74" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7455"  target="_blank">辛口ソース</a></td><td><input id="p_Cost_75" class="numeric"/></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>価格の初期値について</h3>
+			<ul>
+				<li>
+					背景色が緑のものはNPC購入可能アイテム(参考: <a href="https://roween.lies.jp/" target="_blank">Roween</a>)で、
+					ディスカウント可能なものは初期値をディスカウントLv10(-24%)による価格としています。
+				</li>
+				<li>
+					NPC購入不可アイテムの初期値は、<a href="https://rotool.gungho.jp/torihiki/" target="_blank">RO公式ツール・露店取引情報</a>
+					2019/05/18 Breidablikワールド中央値です。
+				</li>
+			</ul>
+		</div>
+
+		<!-- About タブ -->
+		<div id="mainTabs-About">
+			<div align="right"><button id="resetButton">入力内容をリセット</button></div>
+
+			<h3>このツールについて</h3>
+			<p>
+				Ragnarok Online(RO)のスペシャルファーマシーの+6個～+0個の成功比率について、自分の求めたタイプの計算機が見つからなかったので作ったものです。<br/>
+				計算式の元ネタは<a href="https://irowiki.org/wiki/" target="_blank">iRO Wiki</a>(国際版)から取っているので、
+				jRO(日本版)とは計算式や数値が異なる可能性があり、特にアイテム補正についてはiROにおいてもItem Rate Unknownとなっており、
+				作者は英語が得意ではないため<a href="https://irowiki.org/wiki/" target="_blank">iRO Wiki</a>から作成した計算式が間違っている可能性があります。<br/>
+				ファーマシーの計算式の最後に-5しているのは、<a href="http://rovip.info/wiki/?Job%2F3%2FGenetic%2FPharmacy" target="_blank">VIPでRO！本鯖編 Wiki - 製薬スキル</a>を参考にしております。
+			</p>
+
+			<h3>参考</h3>
+			<ul>
+				<li><a href="https://irowiki.org/wiki/" target="_blank">iRO Wiki</a>
+					<ul>
+						<li><a href="https://irowiki.org/wiki/Potion_Creation" target="_blank">Potion Creation</a></li>
+						<li><a href="https://irowiki.org/wiki/Special_Pharmacy" target="_blank">Special Pharmacy</a></li>
+						<li><a href="https://irowiki.org/wiki/Mixed_Cooking" target="_blank">Mixed Cooking</a></li>
+						<li><a href="https://irowiki.org/wiki/Bomb_Creation" target="_blank">Bomb Creation</a></li>
+					</ul>
+				</li>
+				<li><a href="http://rovip.info/wiki/" target="_blank">VIPでRO！本鯖編 Wiki</a>
+					<ul>
+						<li><a href="http://rovip.info/wiki/?Job%2F3%2FGenetic%2FPharmacy" target="_blank">製薬スキル</a></li>
+					</ul>
+				</li>
+				<li><a href="https://roween.lies.jp/" target="_blank">Roween</a></li>
+				<li><a href="https://rotool.gungho.jp/torihiki/" target="_blank">RO公式ツール・露店取引情報</a></li>
+			</ul>
+
+			<!-- 本サイト上でない場合のみ表示 -->
+			<div id="about-Author" style="display: none;">
+				<h3>作成者</h3>
+				<p>
+					まじぽた: Breidablikワールドをメインに活動する非Gvギルド内ポタ屋。<br/>
+					昨今の転送サービスの充実やギルドメンバーの活動の分散により、ポタ屋としての出番がなくなっている。<br/>
+					ポタ屋と名乗ってはいるがメイン職はABではなく、その日の気分で色々な職のキャラを切り替える低レベルエンジョイ勢です。
+				</p>
+				<ul>
+					<li>
+						<a href="https://ro-mastodon.puyo.jp/@magipota" target="_blank">まじぽた@RO丼 - RO Mastodon</a><br/>
+						Ragnarok Onlineの話題専用のMastodonです。(頻度：高)
+					</li>
+					<li>
+						<a href="http://magipota.blog.jp/" target="_blank">まじぽたのロングトゥート</a><br/>
+						RO丼に収まらない内容を書く時用のブログスペースです。(頻度：低)
+					</li>
+					<li>
+						<a href="https://magipota.gozaru.jp/" target="_blank">まじぽたさんすう</a><br/>
+						ブログでも対応できない計算機の類を置いています。(頻度：低)
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

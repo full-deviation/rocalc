@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<title>まじぽたさんすう</title>
+	<meta name="author" content="まじぽた"/>
+	<meta name="description" content="主にRagnarok Online(RO)の簡単な計算機などを設置しています。"/>
+	<meta name="keywords" content="RO,jRO,Ragnarok Online,ラグナロクオンライン,計算機"/>
+	<script src="external/jquery.min.js"></script>
+	<script src="external/jquery-ui.min.js"></script>
+	<link href="external/jquery-ui.min.css" rel="stylesheet"/>
+	<script>
+		/**
+		 * 読み込みが終わった後で初期化を行う。
+		 */
+		$(function() {
+			$('#tabs').tabs();
+		});
+	</script>
+</head>
+<body>
+	<h1>まじぽたさんすう</h1>
+	<p>
+		まじぽたさんすうは、<br/>
+		生まれたばかりの計算機です。<br/>
+	</p>
+
+	<h2>ナニココ</h2>
+	<p>
+		主にRagnarok Online(RO)に関する、ブラウザのみで動作する簡単な計算機などを設置しています。<br/>
+		ただし、確率計算の正当性などは検証を行っている訳ではないので、計算結果は参考値くらいに留めておいた方が無難です。<br/>
+		動作確認は主に<a href="https://www.google.com/intl/ja/chrome/" target="_blank">Google Chrome</a>で行なっているため、ブラウザによっては正常に動作しないことがあるかもしれません。<br/>
+		計算はJavaScriptのjQuery(UI)、入力保存にはCOOKIEまたはlocalStorageを使用しているため、これらを無効にしている場合は一部またはすべての機能が使用できない場合があります。
+	</p>
+
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-Calc">計算機</a></li>
+			<li><a href="#tabs-Link">リンク</a></li>
+			<li><a href="#tabs-Etc">その他</a></li>
+		</ul>
+
+		<!-- 計算機 -->
+		<div id="tabs-Calc">
+			<h3>RO製造計算機</h3>
+			<ul>
+				<li>
+					<a href="rocreation/ROAlchemist.html">アルケミスト系列</a><br/>
+					… ファーマシー、スペシャルファーマシー、ミックスクッキング、爆弾製造の成功率と原価計算ができます。
+				</li>
+				<li>
+					<a href="rocreation/ROAssassin.html">アサシン系列</a><br/>
+					… クリエイトデッドリーポイズン、新毒製造の成功率と原価計算ができます。
+				</li>
+				<li>
+					<a href="rocreation/ROBlacksmith.html">ブラックスミス系列</a><br/>
+					… 鉄製造、鋼鉄製造、属性石製造、武器製作の成功率と原価計算ができます。
+				</li>
+				<li>
+					<a href="rocreation/ROKnight.html">ナイト系列</a><br/>
+					… ルーン製造の成功率と原価計算ができます。
+				</li>
+				<li>
+					<a href="rocreation/ROCooking.html">料理</a><br/>
+					… 料理の成功率と原価計算ができます。
+				</li>
+			</ul>
+
+			<h3>ROツール</h3>
+			<ul>
+				<li>
+					<a href="rotool/ROQuestTable.html">クエスト集計</a><br/>
+					… クエストのクリア人数や、どのキャラがクリアしているかを確認できます。
+				</li>
+			</ul>
+		</div>
+
+		<!-- リンク -->
+		<div id="tabs-Link">
+			<ul>
+				<li>
+					<a href="https://ragnarokonline.gungho.jp/" target="_blank">ラグナロクオンライン公式サイト</a><br/>
+					… 言わずと知れた公式サイト。
+				</li>
+				<li>
+					<a href="https://rotool.gungho.jp/torihiki/" target="_blank">RO公式ツール・露店取引情報</a><br/>
+					… 取引された値段を見るのにお世話になっています。
+				</li>
+				<li>
+					<a href="https://rotool.gungho.jp/monster/" target="_blank">RO公式ツール・モンスターサーチ</a><br/>
+					… モンスターの情報とか見れます。
+				</li>
+				<li>
+					<a href="https://irowiki.org/wiki/" target="_blank">iRO Wiki</a><br/>
+					… まじぽたはjRO(日本版)のプレイヤーですが、
+					計算式の情報公開をしているのがiRO(国際版)とかだったりするのでお世話になっています。
+				</li>
+				<li>
+					<a href="http://rrenewal-ro.daa.jp/" target="_blank">Ragna-Promenade</a><br/>
+					… スキルの仕様を確認するのにお世話になっています。
+				</li>
+				<li>
+					<a href="https://ro.mukya.net/items/" target="_blank">RO-MA [ラグナロクオンライン アイテム逆引き辞典]</a><br/>
+					… アイテム名がURLに入るので、アイテムIDが不明なアイテム名の一覧から詳細を調べるのにお世話になっています。
+				</li>
+				<li>
+					<a href="https://roween.lies.jp/" target="_blank">Roween</a><br/>
+					… アイテムがNPCから買えるかどうか確認するのにお世話になっています。
+				</li>
+				<li>
+					<a href="https://ro-mastodon.puyo.jp/" target="_blank">RO丼 - RO Mastodon</a><br/>
+					… Ragnarok Onlineの話題専用のMastodonです。<br/>
+					※ROまたはRO丼に関係ないトゥートは禁止なので、<a href="http://ro.puyo.jp/" target="_blank">おやくそく</a>をよく読んで登録してください。
+				</li>
+				<li>
+					<a href="http://unitrix.net/" target="_blank">Unitrix</a><br/>
+					… 露店として出された値段を見るのにお世話になっています。<br/>
+					アイテム名がURLに入るので、アイテムIDが不明なアイテム名の一覧から値段を調べるのにお世話になっています。
+				</li>
+			</ul>
+		</div>
+
+		<!-- その他 -->
+		<div id="tabs-Etc">
+			<h3>作成者</h3>
+			<p>
+				まじぽた: Breidablikワールドをメインに活動する非Gvギルド内ポタ屋。<br/>
+				昨今の転送サービスの充実やギルドメンバーの活動の分散により、ポタ屋としての出番がなくなっている。<br/>
+				ポタ屋と名乗ってはいるがメイン職はABではなく、その日の気分で色々な職のキャラを切り替える低レベルエンジョイ勢です。
+			</p>
+			<ul>
+				<li>
+					<a rel="me" href="https://ro-mastodon.puyo.jp/@magipota" target="_blank">まじぽた@RO丼 - RO Mastodon</a><br/>
+					Ragnarok Onlineの話題専用のMastodonです。(頻度：高)
+				</li>
+				<li>
+					<a href="http://magipota.blog.jp/" target="_blank">まじぽたのロングトゥート</a><br/>
+					RO丼に収まらない内容を書く時用のブログスペースです。(頻度：低)
+				</li>
+				<li>
+					<a href="https://magipota.gozaru.jp/">まじぽたさんすう</a><br/>
+					ブログでも対応できない計算機の類を置いています。(頻度：低)
+				</li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>

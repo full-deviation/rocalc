@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta name="author" content="まじぽた"/>
+	<meta name="description" content="Ragnarok Online(RO)の料理による成功率と原価を計算します。"/>
+	<meta name="keywords" content="RO,Ragnarok Online,ラグナロクオンライン,計算機,料理"/>
+	<title>RO製造計算機 - 料理 - まじぽたさんすう</title>
+	<script src="external/jquery.min.js"></script>
+	<script src="external/jquery.cookie.min.js"></script>
+	<script src="external/jquery-ui.min.js"></script>
+	<script src="ROCooking.js"></script>
+	<link href="external/jquery-ui.min.css" rel="stylesheet"/>
+	<link href="ROCreation.css" rel="stylesheet"/>
+</head>
+<body>
+	<h1>RO製造計算機 - 料理</h1>
+
+	<div align="right">
+		<select id="jumpMenu">
+			<option value="ROAlchemist.html">アルケミスト系列</option>
+			<option value="ROAssassin.html">アサシン系列</option>
+			<option value="ROKnight.html">ナイト系列</option>
+			<option value="ROBlacksmith.html">ブラックスミス系列</option>
+			<option value="ROCooking.html" selected="selected">料理</option>
+		</select>
+		<a id="to-Top" href="https://magipota.gozaru.jp/">トップに戻る</a>
+	</div>
+
+	<div><button id="saveButton">入力内容を保存</button></div>
+	<div id="mainTabs">
+		<ul>
+			<li><a href="#mainTabs-Param">パラメータ</a></li>
+			<li><a href="#mainTabs-Cooking-Str">STR料理</a></li>
+			<li><a href="#mainTabs-Cooking-Agi">AGI料理</a></li>
+			<li><a href="#mainTabs-Cooking-Vit">VIT料理</a></li>
+			<li><a href="#mainTabs-Cooking-Int">INT料理</a></li>
+			<li><a href="#mainTabs-Cooking-Dex">DEX料理</a></li>
+			<li><a href="#mainTabs-Cooking-Luk">LUK料理</a></li>
+			<li><a href="#mainTabs-Cost">原価</a></li>
+			<li><a href="#mainTabs-About">About</a></li>
+		</ul>
+
+		<!-- パラメータ タブ -->
+		<div id="mainTabs-Param">
+			<table>
+				<thead>
+					<tr><th>項目</th>
+						<th>基本</th>
+						<th>補正</th></tr>
+				<thead>
+				<tbody>
+					<tr>
+						<td class="identify">BaseLv</td>
+						<td><input id="p_BaseLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td class="identify">DEX</td>
+						<td><input id="p_BaseDEX" class="numeric"/></td>
+						<td>＋ <input id="p_AddDEX" class="numeric"/></td>
+					</tr>
+
+					<tr>
+						<td class="identify">LUK</td>
+						<td><input id="p_BaseLUK" class="numeric"/></td>
+						<td>＋ <input id="p_AddLUK" class="numeric"/></td>
+					</tr>
+
+					<tr>
+						<td class="identify">料理経験</td>
+						<td><input id="p_CookingMastery" class="numeric"/></td>
+						<td>0 ～ 200</td>
+					</tr>
+
+					<tr>
+						<td class="identify">ワールド</td>
+						<td>
+							<select id="p_World">
+								<option value="1">Sigrun</option>
+								<option value="2">Alvitr</option>
+								<option value="3">Vali</option>
+								<option value="4">Trudr</option>
+								<option value="5">Radgrid</option>
+								<option value="6">Olrun</option>
+								<option value="7">Gimle</option>
+								<option value="8">Hervor</option>
+								<option value="9">Idavoll</option>
+								<option value="10">Frigg</option>
+								<option value="11">Mimir</option>
+								<option value="12">Lif</option>
+								<option value="13">Breidablik</option>
+								<option value="14">Urdr</option>
+								<option value="15">Noatun</option>
+							</select>
+						</td>
+						<td>← アイテム名リンク用</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- STR料理 タブ -->
+		<div id="mainTabs-Cooking-Str">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>アイテム補正</th>
+						<th>調理器具</th>
+						<th>成功率(%)</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_0" href="https://rotool.gungho.jp/torihiki/index.php?item=12041&world=15" target="_blank">バッタの炒め物(STR+1)</a></td>
+						<td id="p_CookingItemRates_0" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_0">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_0" class="numeric">-</td>
+						<td id="p_CookingCost_0"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_1" href="https://rotool.gungho.jp/torihiki/index.php?item=12042&world=15" target="_blank">水かきの和え物(STR+2)</a></td>
+						<td id="p_CookingItemRates_1" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_1">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_1" class="numeric">-</td>
+						<td id="p_CookingCost_1"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_2" href="https://rotool.gungho.jp/torihiki/index.php?item=12043&world=15" target="_blank">ボンバーステーキ(STR+3)</a></td>
+						<td id="p_CookingItemRates_2" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_2">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_2" class="numeric">-</td>
+						<td id="p_CookingCost_2"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_3" href="https://rotool.gungho.jp/torihiki/index.php?item=12044&world=15" target="_blank">ハーブの味つきカルビ(STR+4)</a></td>
+						<td id="p_CookingItemRates_3" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_3">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_3" class="numeric">-</td>
+						<td id="p_CookingCost_3"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_4" href="https://rotool.gungho.jp/torihiki/index.php?item=12045&world=15" target="_blank">タシンチェおばさんのチヂミ(STR+5)</a></td>
+						<td id="p_CookingItemRates_4" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_4">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_4" class="numeric">-</td>
+						<td id="p_CookingCost_4"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_5" href="https://rotool.gungho.jp/torihiki/index.php?item=12071&world=15" target="_blank">たれ付き焼き肉(STR+6)</a></td>
+						<td id="p_CookingItemRates_5" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_5">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_5" class="numeric">-</td>
+						<td id="p_CookingCost_5"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_6" href="https://rotool.gungho.jp/torihiki/index.php?item=12072&world=15" target="_blank">串バーベキュー(STR+7)</a></td>
+						<td id="p_CookingItemRates_6" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_6">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_6" class="numeric">-</td>
+						<td id="p_CookingCost_6"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_7" href="https://rotool.gungho.jp/torihiki/index.php?item=12073&world=15" target="_blank">特製くまの足の裏料理(STR+8)</a></td>
+						<td id="p_CookingItemRates_7" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_7">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_7" class="numeric">-</td>
+						<td id="p_CookingCost_7"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_8" href="https://rotool.gungho.jp/torihiki/index.php?item=12074&world=15" target="_blank">筋のソテー(STR+9)</a></td>
+						<td id="p_CookingItemRates_8" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_8">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_8" class="numeric">-</td>
+						<td id="p_CookingCost_8"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_9" href="https://rotool.gungho.jp/torihiki/index.php?item=12075&world=15" target="_blank">タンの盛り合わせ(STR+10)</a></td>
+						<td id="p_CookingItemRates_9" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_9">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_9" class="numeric">-</td>
+						<td id="p_CookingCost_9"        class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [アイテム補正 ＋ 調理器具補正 ＋ (料理経験 × 0.1) ＋ (BaseLv × 0.2) ＋ (DEX × 0.2) ＋ (LUK × 0.1)]%</div>
+		</div>
+
+		<!-- AGI料理 タブ -->
+		<div id="mainTabs-Cooking-Agi">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>アイテム補正</th>
+						<th>調理器具</th>
+						<th>成功率</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_10" href="https://rotool.gungho.jp/torihiki/index.php?item=12056&world=15" target="_blank">かえるの卵の墨汁スープ(AGI+1)</a></td>
+						<td id="p_CookingItemRates_10" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_10">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_10" class="numeric">-</td>
+						<td id="p_CookingCost_10"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_11" href="https://rotool.gungho.jp/torihiki/index.php?item=12057&world=15" target="_blank">ツルツルそば(AGI+2)</a></td>
+						<td id="p_CookingItemRates_11" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_11">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_11" class="numeric">-</td>
+						<td id="p_CookingCost_11"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_12" href="https://rotool.gungho.jp/torihiki/index.php?item=12058&world=15" target="_blank">触手チーズグラタン(AGI+3)</a></td>
+						<td id="p_CookingItemRates_12" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_12">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_12" class="numeric">-</td>
+						<td id="p_CookingCost_12"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_13" href="https://rotool.gungho.jp/torihiki/index.php?item=12059&world=15" target="_blank">ルティエビビン冷麺(AGI+4)</a></td>
+						<td id="p_CookingItemRates_13" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_13">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_13" class="numeric">-</td>
+						<td id="p_CookingCost_13"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_14" href="https://rotool.gungho.jp/torihiki/index.php?item=12060&world=15" target="_blank">コウモリの翼のカボチャ蒸し(AGI+5)</a></td>
+						<td id="p_CookingItemRates_14" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_14">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_14" class="numeric">-</td>
+						<td id="p_CookingCost_14"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_15" href="https://rotool.gungho.jp/torihiki/index.php?item=12086&world=15" target="_blank">エビチリグラタン(AGI+6)</a></td>
+						<td id="p_CookingItemRates_15" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_15">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_15" class="numeric">-</td>
+						<td id="p_CookingCost_15"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_16" href="https://rotool.gungho.jp/torihiki/index.php?item=12087&world=15" target="_blank">焼きワニの野菜蒸し(AGI+7)</a></td>
+						<td id="p_CookingItemRates_16" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_16">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_16" class="numeric">-</td>
+						<td id="p_CookingCost_16"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_17" href="https://rotool.gungho.jp/torihiki/index.php?item=12088&world=15" target="_blank">激辛カレー(AGI+8)</a></td>
+						<td id="p_CookingItemRates_17" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_17">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_17" class="numeric">-</td>
+						<td id="p_CookingCost_17"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_18" href="https://rotool.gungho.jp/torihiki/index.php?item=12089&world=15" target="_blank">特製肉煮込み(AGI+9)</a></td>
+						<td id="p_CookingItemRates_18" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_18">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_18" class="numeric">-</td>
+						<td id="p_CookingCost_18"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_19" href="https://rotool.gungho.jp/torihiki/index.php?item=12090&world=15" target="_blank">茹でサソリ(AGI+10)</a></td>
+						<td id="p_CookingItemRates_19" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_19">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_19" class="numeric">-</td>
+						<td id="p_CookingCost_19"        class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [アイテム補正 ＋ 調理器具補正 ＋ (料理経験 × 0.1) ＋ (BaseLv × 0.2) ＋ (DEX × 0.2) ＋ (LUK × 0.1)]%</div>
+		</div>
+
+		<!-- VIT料理 タブ -->
+		<div id="mainTabs-Cooking-Vit">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>アイテム補正</th>
+						<th>調理器具</th>
+						<th>成功率</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_20" href="https://rotool.gungho.jp/torihiki/index.php?item=12051&world=15" target="_blank">蒸しガニ(VIT+1)</a></td>
+						<td id="p_CookingItemRates_20" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_20">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_20" class="numeric">-</td>
+						<td id="p_CookingCost_20"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_21" href="https://rotool.gungho.jp/torihiki/index.php?item=12052&world=15" target="_blank">海の幸の生春巻き(VIT+2)</a></td>
+						<td id="p_CookingItemRates_21" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_21">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_21" class="numeric">-</td>
+						<td id="p_CookingCost_21"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_22" href="https://rotool.gungho.jp/torihiki/index.php?item=12053&world=15" target="_blank">貝のお吸い物(VIT+3)</a></td>
+						<td id="p_CookingItemRates_22" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_22">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_22" class="numeric">-</td>
+						<td id="p_CookingCost_22"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_23" href="https://rotool.gungho.jp/torihiki/index.php?item=12054&world=15" target="_blank">クラゲの和え物(VIT+4)</a></td>
+						<td id="p_CookingItemRates_23" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_23">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_23" class="numeric">-</td>
+						<td id="p_CookingCost_23"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_24" href="https://rotool.gungho.jp/torihiki/index.php?item=12055&world=15" target="_blank">辛口焼餃子(VIT+5)</a></td>
+						<td id="p_CookingItemRates_24" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_24">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_24" class="numeric">-</td>
+						<td id="p_CookingCost_24"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_25" href="https://rotool.gungho.jp/torihiki/index.php?item=12081&world=15" target="_blank">めちゃ苦い薬(VIT+6)</a></td>
+						<td id="p_CookingItemRates_25" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_25">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_25" class="numeric">-</td>
+						<td id="p_CookingCost_25"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_26" href="https://rotool.gungho.jp/torihiki/index.php?item=12082&world=15" target="_blank">特製山海珍味(VIT+7)</a></td>
+						<td id="p_CookingItemRates_26" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_26">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_26" class="numeric">-</td>
+						<td id="p_CookingCost_26"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_27" href="https://rotool.gungho.jp/torihiki/index.php?item=12083&world=15" target="_blank">特大包み料理(VIT+8)</a></td>
+						<td id="p_CookingItemRates_27" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_27">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_27" class="numeric">-</td>
+						<td id="p_CookingCost_27"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_28" href="https://rotool.gungho.jp/torihiki/index.php?item=12084&world=15" target="_blank">竜の激辛スープ(VIT+9)</a></td>
+						<td id="p_CookingItemRates_28" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_28">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_28" class="numeric">-</td>
+						<td id="p_CookingCost_28"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_29" href="https://rotool.gungho.jp/torihiki/index.php?item=12085&world=15" target="_blank">不死のチゲ鍋(VIT+10)</a></td>
+						<td id="p_CookingItemRates_29" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_29">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_29" class="numeric">-</td>
+						<td id="p_CookingCost_29"        class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [アイテム補正 ＋ 調理器具補正 ＋ (料理経験 × 0.1) ＋ (BaseLv × 0.2) ＋ (DEX × 0.2) ＋ (LUK × 0.1)]%</div>
+		</div>
+
+		<!-- INT料理 タブ -->
+		<div id="mainTabs-Cooking-Int">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>アイテム補正</th>
+						<th>調理器具</th>
+						<th>成功率</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_30" href="https://rotool.gungho.jp/torihiki/index.php?item=12046&world=15" target="_blank">ブドウ果汁入りハーブティー(INT+1)</a></td>
+						<td id="p_CookingItemRates_30" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_30">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_30" class="numeric">-</td>
+						<td id="p_CookingCost_30"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_31" href="https://rotool.gungho.jp/torihiki/index.php?item=12047&world=15" target="_blank">万葉の紅茶(INT+2)</a></td>
+						<td id="p_CookingItemRates_31" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_31">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_31" class="numeric">-</td>
+						<td id="p_CookingCost_31"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_32" href="https://rotool.gungho.jp/torihiki/index.php?item=12048&world=15" target="_blank">ハーブハチ蜜茶(INT+3)</a></td>
+						<td id="p_CookingItemRates_32" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_32">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_32" class="numeric">-</td>
+						<td id="p_CookingCost_32"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_33" href="https://rotool.gungho.jp/torihiki/index.php?item=12049&world=15" target="_blank">モロク果実酒(INT+4)</a></td>
+						<td id="p_CookingItemRates_33" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_33">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_33" class="numeric">-</td>
+						<td id="p_CookingCost_33"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_34" href="https://rotool.gungho.jp/torihiki/index.php?item=12050&world=15" target="_blank">マステラ酒(INT+5)</a></td>
+						<td id="p_CookingItemRates_34" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_34">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_34" class="numeric">-</td>
+						<td id="p_CookingCost_34"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_35" href="https://rotool.gungho.jp/torihiki/index.php?item=12076&world=15" target="_blank">赤いきのこワイン(INT+6)</a></td>
+						<td id="p_CookingItemRates_35" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_35">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_35" class="numeric">-</td>
+						<td id="p_CookingCost_35"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_36" href="https://rotool.gungho.jp/torihiki/index.php?item=12077&world=15" target="_blank">特製ローヤルハーブティー(INT+7)</a></td>
+						<td id="p_CookingItemRates_36" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_36">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_36" class="numeric">-</td>
+						<td id="p_CookingCost_36"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_37" href="https://rotool.gungho.jp/torihiki/index.php?item=12078&world=15" target="_blank">王室専用高級茶(INT+8)</a></td>
+						<td id="p_CookingItemRates_37" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_37">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_37" class="numeric">-</td>
+						<td id="p_CookingCost_37"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_38" href="https://rotool.gungho.jp/torihiki/index.php?item=12079&world=15" target="_blank">トリスタン12年(INT+9)</a></td>
+						<td id="p_CookingItemRates_38" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_38">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_38" class="numeric">-</td>
+						<td id="p_CookingCost_38"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_39" href="https://rotool.gungho.jp/torihiki/index.php?item=12080&world=15" target="_blank">カクテル・竜の吐息(INT+10)</a></td>
+						<td id="p_CookingItemRates_39" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_39">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_39" class="numeric">-</td>
+						<td id="p_CookingCost_39"        class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [アイテム補正 ＋ 調理器具補正 ＋ (料理経験 × 0.1) ＋ (BaseLv × 0.2) ＋ (DEX × 0.2) ＋ (LUK × 0.1)]%</div>
+		</div>
+
+		<!-- DEX料理 タブ -->
+		<div id="mainTabs-Cooking-Dex">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>アイテム補正</th>
+						<th>調理器具</th>
+						<th>成功率</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_40" href="https://rotool.gungho.jp/torihiki/index.php?item=12061&world=15" target="_blank">ハチ蜜ブドウジュース(DEX+1)</a></td>
+						<td id="p_CookingItemRates_40" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_40">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_40" class="numeric">-</td>
+						<td id="p_CookingCost_40"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_41" href="https://rotool.gungho.jp/torihiki/index.php?item=12062&world=15" target="_blank">チョコレートムースケーキ(DEX+2)</a></td>
+						<td id="p_CookingItemRates_41" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_41">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_41" class="numeric">-</td>
+						<td id="p_CookingCost_41"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_42" href="https://rotool.gungho.jp/torihiki/index.php?item=12063&world=15" target="_blank">フルーツミックス(DEX+3)</a></td>
+						<td id="p_CookingItemRates_42" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_42">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_42" class="numeric">-</td>
+						<td id="p_CookingCost_42"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_43" href="https://rotool.gungho.jp/torihiki/index.php?item=12064&world=15" target="_blank">クリームサンドイッチ(DEX+4)</a></td>
+						<td id="p_CookingItemRates_43" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_43">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_43" class="numeric">-</td>
+						<td id="p_CookingCost_43"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_44" href="https://rotool.gungho.jp/torihiki/index.php?item=12065&world=15" target="_blank">グリーンサラダ(DEX+5)</a></td>
+						<td id="p_CookingItemRates_44" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_44">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_44" class="numeric">-</td>
+						<td id="p_CookingCost_44"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_45" href="https://rotool.gungho.jp/torihiki/index.php?item=12091&world=15" target="_blank">ピーチケーキ(DEX+6)</a></td>
+						<td id="p_CookingItemRates_45" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_45">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_45" class="numeric">-</td>
+						<td id="p_CookingCost_45"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_46" href="https://rotool.gungho.jp/torihiki/index.php?item=12092&world=15" target="_blank">ソウルハントブレッド(DEX+7)</a></td>
+						<td id="p_CookingItemRates_46" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_46">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_46" class="numeric">-</td>
+						<td id="p_CookingCost_46"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_47" href="https://rotool.gungho.jp/torihiki/index.php?item=12093&world=15" target="_blank">スペシャルトースト(DEX+8)</a></td>
+						<td id="p_CookingItemRates_47" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_47">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_47" class="numeric">-</td>
+						<td id="p_CookingCost_47"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_48" href="https://rotool.gungho.jp/torihiki/index.php?item=12094&world=15" target="_blank">天上のフルーツジュース(DEX+9)</a></td>
+						<td id="p_CookingItemRates_48" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_48">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_48" class="numeric">-</td>
+						<td id="p_CookingCost_48"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_49" href="https://rotool.gungho.jp/torihiki/index.php?item=12095&world=15" target="_blank">フベルゲルミルの酒(DEX+10)</a></td>
+						<td id="p_CookingItemRates_49" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_49">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_49" class="numeric">-</td>
+						<td id="p_CookingCost_49"        class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [アイテム補正 ＋ 調理器具補正 ＋ (料理経験 × 0.1) ＋ (BaseLv × 0.2) ＋ (DEX × 0.2) ＋ (LUK × 0.1)]%</div>
+		</div>
+
+		<!-- LUK料理 タブ -->
+		<div id="mainTabs-Cooking-Luk">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>アイテム補正</th>
+						<th>調理器具</th>
+						<th>成功率</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_50" href="https://rotool.gungho.jp/torihiki/index.php?item=12066&world=15" target="_blank">サルのしっぽ炒め(LUK+1)</a></td>
+						<td id="p_CookingItemRates_50" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_50">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_50" class="numeric">-</td>
+						<td id="p_CookingCost_50"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_51" href="https://rotool.gungho.jp/torihiki/index.php?item=12067&world=15" target="_blank">ミックスジュース(LUK+2)</a></td>
+						<td id="p_CookingItemRates_51" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_51">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_51" class="numeric">-</td>
+						<td id="p_CookingCost_51"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_52" href="https://rotool.gungho.jp/torihiki/index.php?item=12068&world=15" target="_blank">大学いも(LUK+3)</a></td>
+						<td id="p_CookingItemRates_52" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_52">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_52" class="numeric">-</td>
+						<td id="p_CookingCost_52"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_53" href="https://rotool.gungho.jp/torihiki/index.php?item=12069&world=15" target="_blank">古代魚の活造り(LUK+4)</a></td>
+						<td id="p_CookingItemRates_53" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_53">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_53" class="numeric">-</td>
+						<td id="p_CookingCost_53"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_54" href="https://rotool.gungho.jp/torihiki/index.php?item=12070&world=15" target="_blank">サソリの炒め物(LUK+5)</a></td>
+						<td id="p_CookingItemRates_54" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_54">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_54" class="numeric">-</td>
+						<td id="p_CookingCost_54"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_55" href="https://rotool.gungho.jp/torihiki/index.php?item=12096&world=15" target="_blank">強運の汁(LUK+6)</a></td>
+						<td id="p_CookingItemRates_55" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_55">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_55" class="numeric">-</td>
+						<td id="p_CookingCost_55"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_56" href="https://rotool.gungho.jp/torihiki/index.php?item=12097&world=15" target="_blank">串焼き(LUK+7)</a></td>
+						<td id="p_CookingItemRates_56" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_56">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_56" class="numeric">-</td>
+						<td id="p_CookingCost_56"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_57" href="https://rotool.gungho.jp/torihiki/index.php?item=12098&world=15" target="_blank">イチゴ味のおにぎり(LUK+8)</a></td>
+						<td id="p_CookingItemRates_57" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_57">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_57" class="numeric">-</td>
+						<td id="p_CookingCost_57"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_58" href="https://rotool.gungho.jp/torihiki/index.php?item=12099&world=15" target="_blank">おいしい血の炭酸ソーダ(LUK+9)</a></td>
+						<td id="p_CookingItemRates_58" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_58">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_58" class="numeric">-</td>
+						<td id="p_CookingCost_58"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CookingItemName_59" href="https://rotool.gungho.jp/torihiki/index.php?item=12100&world=15" target="_blank">九尾狐のしっぽ料理(LUK+10)</a></td>
+						<td id="p_CookingItemRates_59" class="numeric">-</td>
+						<td>
+							<select id="p_CookingKit_59">
+								<option value="0">野外用調理器具</option>
+								<option value="125">家庭用調理器具</option>
+								<option value="250">高級調理器具</option>
+								<option value="375">宮廷用調理器具</option>
+								<option value="2000">幻の調理器具</option>
+							</select>
+						</td>
+						<td id="p_CookingBrewingRate_59" class="numeric">-</td>
+						<td id="p_CookingCost_59"        class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [アイテム補正 ＋ 調理器具補正 ＋ (料理経験 × 0.1) ＋ (BaseLv × 0.2) ＋ (DEX × 0.2) ＋ (LUK × 0.1)]%</div>
+		</div>
+
+		<!-- 原価 タブ -->
+		<div id="mainTabs-Cost">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr><th>アイテム</th>
+						<th>価格(Zeny)</th>
+						<th>アイテム</th>
+						<th>価格(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=12125" target="_blank">野外用調理器具</a></td><td><input id="p_Cost_0" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=12126" target="_blank">家庭用調理器具</a></td><td><input id="p_Cost_1" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=12127&world=15" target="_blank">高級調理器具</a></td><td><input id="p_Cost_2" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=12128&world=15" target="_blank">宮廷用調理器具</a></td><td><input id="p_Cost_3" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=12129&world=15" target="_blank">幻の調理器具</a></td><td><input id="p_Cost_4" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=510&world=15" target="_blank">青ハーブ</a></td><td><input id="p_Cost_5" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=505" target="_blank">青ポーション</a></td><td><input id="p_Cost_6" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7456" target="_blank">赤い香辛料</a></td><td><input id="p_Cost_7" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7006&world=15" target="_blank">赤いコウモリの翼</a></td><td><input id="p_Cost_8" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=507&world=15" target="_blank">赤ハーブ</a></td><td><input id="p_Cost_9" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=501" target="_blank">赤ポーション</a></td><td><input id="p_Cost_10" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7003&world=15" target="_blank">アノリアンの皮膚</a></td><td><input id="p_Cost_11" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7453" target="_blank">甘口ソース</a></td><td><input id="p_Cost_12" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=970&world=15" target="_blank">アルコール</a></td><td><input id="p_Cost_13" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=704&world=15" target="_blank">アロエ</a></td><td><input id="p_Cost_14" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=521&world=15" target="_blank">アロエの葉</a></td><td><input id="p_Cost_15" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=606&world=15" target="_blank">アロエベラ</a></td><td><input id="p_Cost_16" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=605&world=15" target="_blank">アンティペインメント</a></td><td><input id="p_Cost_17" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=608&world=15" target="_blank">イグドラシルの種</a></td><td><input id="p_Cost_18" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=610" target="_blank">イグドラシルの葉</a></td><td><input id="p_Cost_19" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=607&world=15" target="_blank">イグドラシルの実</a></td><td><input id="p_Cost_20" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=709&world=15" target="_blank">イジドル</a></td><td><input id="p_Cost_21" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=578" target="_blank">イチゴ</a></td><td><input id="p_Cost_22" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1028&world=15" target="_blank">いのししのたてがみ</a></td><td><input id="p_Cost_23" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=516" target="_blank">いも</a></td><td><input id="p_Cost_24" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=707&world=15" target="_blank">歌う草</a></td><td><input id="p_Cost_25" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=936&world=15" target="_blank">鱗のかけら</a></td><td><input id="p_Cost_26" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=567" target="_blank">エビ</a></td><td><input id="p_Cost_27" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=579" target="_blank">おいしい魚</a></td><td><input id="p_Cost_28" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=549&world=15" target="_blank">おいしい焼きいも</a></td><td><input id="p_Cost_29" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7198&world=15" target="_blank">大きな葉</a></td><td><input id="p_Cost_30" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=582&world=15" target="_blank">オレンジ</a></td><td><input id="p_Cost_31" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=620&world=15" target="_blank">オレンジジュース</a></td><td><input id="p_Cost_32" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=961&world=15" target="_blank">貝</a></td><td><input id="p_Cost_33" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=966&world=15" target="_blank">貝のむきみ</a></td><td><input id="p_Cost_34" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=908&world=15" target="_blank">かえるの卵</a></td><td><input id="p_Cost_35" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7182&world=15" target="_blank">カカオ</a></td><td><input id="p_Cost_36" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=954&world=15" target="_blank">輝く鱗</a></td><td><input id="p_Cost_37" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=702&world=15" target="_blank">家畜の血</a></td><td><input id="p_Cost_38" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=960&world=15" target="_blank">かにニッパ</a></td><td><input id="p_Cost_39" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=1062" target="_blank">カボチャの頭</a></td><td><input id="p_Cost_40" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7455" target="_blank">辛口ソース</a></td><td><input id="p_Cost_41" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7452" target="_blank">黄色い香辛料</a></td><td><input id="p_Cost_42" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1019&world=15" target="_blank">木屑</a></td><td><input id="p_Cost_43" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1022&world=15" target="_blank">狐の尻尾</a></td><td><input id="p_Cost_44" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=921&world=15" target="_blank">きのこの胞子</a></td><td><input id="p_Cost_45" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=508&world=15" target="_blank">黄ハーブ</a></td><td><input id="p_Cost_46" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=503" target="_blank">黄ポーション</a></td><td><input id="p_Cost_47" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7119&world=15" target="_blank">菌糸</a></td><td><input id="p_Cost_48" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=948&world=15" target="_blank">くまの足の裏</a></td><td><input id="p_Cost_49" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=705&world=15" target="_blank">クローバー</a></td><td><input id="p_Cost_50" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1050&world=15" target="_blank">血管</a></td><td><input id="p_Cost_51" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=710&world=15" target="_blank">幻想の花</a></td><td><input id="p_Cost_52" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=577" target="_blank">穀物</a></td><td><input id="p_Cost_53" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1054&world=15" target="_blank">古代魚の唇</a></td><td><input id="p_Cost_54" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1023&world=15" target="_blank">魚の尻尾</a></td><td><input id="p_Cost_55" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7125&world=15" target="_blank">さそりニッパ</a></td><td><input id="p_Cost_56" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=904&world=15" target="_blank">サソリの尻尾</a></td><td><input id="p_Cost_57" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=942&world=15" target="_blank">サルのしっぽ</a></td><td><input id="p_Cost_58" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=934" target="_blank">死者の遺品</a></td><td><input id="p_Cost_59" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=962&world=15" target="_blank">触手</a></td><td><input id="p_Cost_60" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1033&world=15" target="_blank">食人植物の根</a></td><td><input id="p_Cost_61" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7457" target="_blank">食用油</a></td><td><input id="p_Cost_62" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=581" target="_blank">食用キノコ</a></td><td><input id="p_Cost_63" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=736" target="_blank">白い皿</a></td><td><input id="p_Cost_64" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=509&world=15" target="_blank">白ハーブ</a></td><td><input id="p_Cost_65" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=645" target="_blank">スピードアップポーション</a></td><td><input id="p_Cost_66" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7100&world=15" target="_blank">鋭い葉っぱ</a></td><td><input id="p_Cost_67" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1003&world=15" target="_blank">石炭</a></td><td><input id="p_Cost_68" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=951&world=15" target="_blank">背びれ</a></td><td><input id="p_Cost_69" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=945&world=15" target="_blank">タヌキ木の葉</a></td><td><input id="p_Cost_70" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7454" target="_blank">淡白なソース</a></td><td><input id="p_Cost_71" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7188&world=15" target="_blank">茶色い根</a></td><td><input id="p_Cost_72" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=548&world=15" target="_blank">チーズ</a></td><td><input id="p_Cost_73" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=956&world=15" target="_blank">トゲがついているエラ</a></td><td><input id="p_Cost_74" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=576&world=15" target="_blank">トゲの実</a></td><td><input id="p_Cost_75" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7164&world=15" target="_blank">とてもかたい桃</a></td><td><input id="p_Cost_76" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=621&world=15" target="_blank">とても苦い草</a></td><td><input id="p_Cost_77" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=929&world=15" target="_blank">止まらない心臓</a></td><td><input id="p_Cost_78" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7123&world=15" target="_blank">ドラゴンの皮</a></td><td><input id="p_Cost_79" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1037&world=15" target="_blank">ドラゴンの尻尾</a></td><td><input id="p_Cost_80" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1015&world=15" target="_blank">長く細い舌</a></td><td><input id="p_Cost_81" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7482" target="_blank">鍋</a></td><td><input id="p_Cost_82" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=517" target="_blank">にく</a></td><td><input id="p_Cost_83" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=622&world=15" target="_blank">虹色ニンジン</a></td><td><input id="p_Cost_84" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=950&world=15" target="_blank">人魚の心臓</a></td><td><input id="p_Cost_85" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=515" target="_blank">ニンジン</a></td><td><input id="p_Cost_86" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=534&world=15" target="_blank">ニンジンジュース</a></td><td><input id="p_Cost_87" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=634&world=15" target="_blank">熱帯のバナナ</a></td><td><input id="p_Cost_88" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=518&world=15" target="_blank">ハチ蜜</a></td><td><input id="p_Cost_89" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=903&world=15" target="_blank">爬虫類の舌</a></td><td><input id="p_Cost_90" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7298&world=15" target="_blank">葉っぱの服</a></td><td><input id="p_Cost_91" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=609&world=15" target="_blank">返魂のお札</a></td><td><input id="p_Cost_92" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=940&world=15" target="_blank">バッタの足</a></td><td><input id="p_Cost_93" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=513" target="_blank">バナナ</a></td><td><input id="p_Cost_94" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=553&world=15" target="_blank">小包子</a></td><td><input id="p_Cost_95" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=580" target="_blank">パン</a></td><td><input id="p_Cost_96" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7098&world=15" target="_blank">火種</a></td><td><input id="p_Cost_97" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=539&world=15" target="_blank">ひとくちケーキ</a></td><td><input id="p_Cost_98" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=520&world=15" target="_blank">ヒナレの葉</a></td><td><input id="p_Cost_99" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7066&world=15" target="_blank">氷片</a></td><td><input id="p_Cost_100" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=632&world=15" target="_blank">太っているミミズ</a></td><td><input id="p_Cost_101" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7031&world=15" target="_blank">古いフライパン</a></td><td><input id="p_Cost_102" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=514&world=15" target="_blank">ブドウ</a></td><td><input id="p_Cost_103" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=533&world=15" target="_blank">ブドウジュース</a></td><td><input id="p_Cost_104" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=918&world=15" target="_blank">べとべと水かき</a></td><td><input id="p_Cost_105" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=537" target="_blank">ペットフード</a></td><td><input id="p_Cost_106" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1024&world=15" target="_blank">墨汁</a></td><td><input id="p_Cost_107" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1061&world=15" target="_blank">魔女の星の砂</a></td><td><input id="p_Cost_108" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=522" target="_blank">マステラの実</a></td><td><input id="p_Cost_109" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=619&world=15" target="_blank">まだ熟してないリンゴ</a></td><td><input id="p_Cost_110" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1042&world=15" target="_blank">短い足</a></td><td><input id="p_Cost_111" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=511&world=15" target="_blank">緑ハーブ</a></td><td><input id="p_Cost_112" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=519" target="_blank">ミルク</a></td><td><input id="p_Cost_113" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=708&world=15" target="_blank">メント</a></td><td><input id="p_Cost_114" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=633&world=15" target="_blank">焼きいも</a></td><td><input id="p_Cost_115" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7194&world=15" target="_blank">軟らかい草の葉</a></td><td><input id="p_Cost_116" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=706&world=15" target="_blank">四葉のクローバー</a></td><td><input id="p_Cost_117" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=512" target="_blank">リンゴ</a></td><td><input id="p_Cost_118" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=531&world=15" target="_blank">リンゴジュース</a></td><td><input id="p_Cost_119" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7286&world=15" target="_blank">レッドチリ</a></td><td><input id="p_Cost_120" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=568" target="_blank">レモン</a></td><td><input id="p_Cost_121" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=526&world=15" target="_blank">ローヤルゼリー</a></td><td><input id="p_Cost_122" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=711&world=15" target="_blank">若芽</a></td><td><input id="p_Cost_123" class="numeric"/></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>価格の初期値について</h3>
+			<ul>
+				<li>
+					背景色が緑のものはNPC購入可能アイテム(参考: <a href="https://roween.lies.jp/" target="_blank">Roween</a>)で、
+					ディスカウント可能なものは初期値をディスカウントLv10(-24%)による価格としています。
+				</li>
+				<li>
+					NPC購入不可アイテムの初期値は、<a href="https://rotool.gungho.jp/torihiki/" target="_blank">RO公式ツール・露店取引情報</a>
+					2019/05/23 Breidablikワールド中央値、または取引履歴がないものはオーバーチャージLv10(+24%)による価格としています。
+				</li>
+			</ul>
+		</div>
+
+		<!-- About タブ -->
+		<div id="mainTabs-About">
+			<div align="right"><button id="resetButton">入力内容をリセット</button></div>
+
+			<h3>このツールについて</h3>
+			<p>
+				Ragnarok Online(RO)の料理製造をまとめたものです。<br/>
+				計算式の元ネタは<a href="http://www.roquest.work/" target="_blank">ROクエスト案内所</a>。
+			</p>
+
+			<h3>参考</h3>
+			<ul>
+				<li><a href="http://www.roquest.work/" target="_blank">ROクエスト案内所</a>
+					<ul>
+						<li><a href="http://www.roquest.work/index.php?%E6%96%99%E7%90%86" target="_blank">料理</a></li>
+					</ul>
+				</li>
+				<li><a href="https://roween.lies.jp/" target="_blank">Roween</a></li>
+				<li><a href="https://rotool.gungho.jp/torihiki/" target="_blank">RO公式ツール・露店取引情報</a></li>
+			</ul>
+
+			<!-- 本サイト上でない場合のみ表示 -->
+			<div id="about-Author" style="display: none;">
+				<h3>作成者</h3>
+				<p>
+					まじぽた: Breidablikワールドをメインに活動する非Gvギルド内ポタ屋。<br/>
+					昨今の転送サービスの充実やギルドメンバーの活動の分散により、ポタ屋としての出番がなくなっている。<br/>
+					ポタ屋と名乗ってはいるがメイン職はABではなく、その日の気分で色々な職のキャラを切り替える低レベルエンジョイ勢です。
+				</p>
+				<ul>
+					<li>
+						<a href="https://ro-mastodon.puyo.jp/@magipota" target="_blank">まじぽた@RO丼 - RO Mastodon</a><br/>
+						Ragnarok Onlineの話題専用のMastodonです。(頻度：高)
+					</li>
+					<li>
+						<a href="http://magipota.blog.jp/" target="_blank">まじぽたのロングトゥート</a><br/>
+						RO丼に収まらない内容を書く時用のブログスペースです。(頻度：低)
+					</li>
+					<li>
+						<a href="https://magipota.gozaru.jp/" target="_blank">まじぽたさんすう</a><br/>
+						ブログでも対応できない計算機の類を置いています。(頻度：低)
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

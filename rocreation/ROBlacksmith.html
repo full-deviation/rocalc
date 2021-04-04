@@ -1,0 +1,3410 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta name="author" content="まじぽた"/>
+	<meta name="description" content="Ragnarok Online(RO)のブラックスミスの製造スキル(鉄製造、鋼鉄製造、属性石製造、短剣製作、剣製作、両手剣製作、槍製作、ナックル製作、メイス製作、斧製作)による成功率と原価を計算します。"/>
+	<meta name="keywords" content="RO,jRO,Ragnarok Online,ラグナロクオンライン,計算機,武器製造,ブラックスミス,鉄製造,鋼鉄製造,属性石製造,短剣製作,剣製作,両手剣製作,槍製作,ナックル製作,メイス製作,斧製作"/>
+	<title>RO製造計算機 - ブラックスミス系列 - まじぽたさんすう</title>
+	<script src="external/jquery.min.js"></script>
+	<script src="external/jquery.cookie.min.js"></script>
+	<script src="external/jquery-ui.min.js"></script>
+	<script src="ROBlacksmith.js"></script>
+	<link href="external/jquery-ui.min.css" rel="stylesheet"/>
+	<link href="ROCreation.css" rel="stylesheet"/>
+</head>
+<body>
+	<h1>RO製造計算機 - ブラックスミス系列</h1>
+
+	<div align="right">
+		<select id="jumpMenu">
+			<option value="ROAlchemist.html">アルケミスト系列</option>
+			<option value="ROAssassin.html">アサシン系列</option>
+			<option value="ROKnight.html">ナイト系列</option>
+			<option value="ROBlacksmith.html" selected="selected">ブラックスミス系列</option>
+			<option value="ROCooking.html">料理</option>
+		</select>
+		<a id="to-Top" href="https://magipota.gozaru.jp/">トップに戻る</a>
+	</div>
+
+	<div><button id="saveButton">入力内容を保存</button></div>
+	<div id="mainTabs">
+		<ul>
+			<li><a href="#mainTabs-Param">パラメータ</a></li>
+			<li><a href="#mainTabs-OreTempering">鉱石製造系</a></li>
+			<li><a href="#mainTabs-SmithDagger">短剣製作</a></li>
+			<li><a href="#mainTabs-SmithSword">剣製作</a></li>
+			<li><a href="#mainTabs-SmithTwoHandedSword">両手剣製作</a></li>
+			<li><a href="#mainTabs-SmithSpear">槍製作</a></li>
+			<li><a href="#mainTabs-SmithAxe">斧製作</a></li>
+			<li><a href="#mainTabs-SmithBrassKnuckle">ナックル製作</a></li>
+			<li><a href="#mainTabs-SmithMace">メイス製作</a></li>
+			<li><a href="#mainTabs-Cost">原価</a></li>
+			<li><a href="#mainTabs-About">About</a></li>
+		</ul>
+
+		<!-- パラメータ タブ -->
+		<div id="mainTabs-Param">
+			<table>
+				<thead>
+					<tr>
+						<th>項目</th>
+						<th>基本</th>
+						<th>補正</th>
+					</tr>
+				<thead>
+				<tbody>
+					<tr>
+						<td class="identify">JobLv</td>
+						<td><input id="p_JobLv" class="numeric"/></td>
+						<td>
+							<select id="p_Job">
+								<option value="1">ブラックスミス</option>
+								<option value="2">ホワイトスミス</option>
+								<option value="3">メカニック</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td class="identify">DEX</td>
+						<td><input id="p_BaseDEX" class="numeric"/></td>
+						<td>＋ <input id="p_AddDEX" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify">LUK</td>
+						<td><input id="p_BaseLUK" class="numeric"/></td>
+						<td>＋ <input id="p_AddLUK" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify">鉄製造</td>
+						<td><input id="p_IronTemperingLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">鋼鉄製造</td>
+						<td><input id="p_SteelTemperingLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">属性石製造</td>
+						<td><input id="p_EnchantedStoneCraftLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">武器研究</td>
+						<td><input id="p_WeaponryResearchLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">金敷</td>
+						<td>
+							<select id="p_Anvil">
+								<option value="0">金敷</option>
+								<option value="3">オリデオコンの金敷</option>
+								<option value="5">黄金の金敷</option>
+								<option value="10">エンペリウムの金敷</option>
+							</select>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">短剣製作</td>
+						<td><input id="p_SmithDaggerLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">剣製作</td>
+						<td><input id="p_SmithSwordLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">両手剣製作</td>
+						<td><input id="p_SmithTwoHandedSwordLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">槍製作</td>
+						<td><input id="p_SmithSpearLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">斧製作</td>
+						<td><input id="p_SmithAxeLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">ナックル製作</td>
+						<td><input id="p_SmithBrassKnuckleLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">メイス製作</td>
+						<td><input id="p_SmithMaceLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">ワールド</td>
+						<td>
+							<select id="p_World">
+								<option value="1">Sigrun</option>
+								<option value="2">Alvitr</option>
+								<option value="3">Vali</option>
+								<option value="4">Trudr</option>
+								<option value="5">Radgrid</option>
+								<option value="6">Olrun</option>
+								<option value="7">Gimle</option>
+								<option value="8">Hervor</option>
+								<option value="9">Idavoll</option>
+								<option value="10">Frigg</option>
+								<option value="11">Mimir</option>
+								<option value="12">Lif</option>
+								<option value="13">Breidablik</option>
+								<option value="14">Urdr</option>
+								<option value="15">Noatun</option>
+							</select>
+						</td>
+						<td>← アイテム名リンク用</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- 鉱石製造系 タブ -->
+		<div id="mainTabs-OreTempering">
+			<h3>鉄製造</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>成功率(%)</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_IronTemperingItemName_0" href="https://rotool.gungho.jp/torihiki/index.php?item=998&world=15" target="_blank">鉄</a></td>
+						<td id="p_IronTemperingBrewingRate_0" class="numeric">-</td>
+						<td id="p_IronTemperingCost_0"        class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>鋼鉄製造</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>成功率(%)</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_SteelTemperingItemName_0" href="https://rotool.gungho.jp/torihiki/index.php?item=999&world=15" target="_blank">鋼鉄</a></td>
+						<td id="p_SteelTemperingBrewingRate_0" class="numeric">-</td>
+						<td id="p_SteelTemperingCost_0"        class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>属性石製造</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>成功率(%)</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_EnchantedStoneCraftItemName_0" href="https://rotool.gungho.jp/torihiki/index.php?item=994&world=15" target="_blank">フレイムハート</a></td>
+						<td id="p_EnchantedStoneCraftBrewingRate_0" class="numeric">-</td>
+						<td id="p_EnchantedStoneCraftCost_0"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_EnchantedStoneCraftItemName_1" href="https://rotool.gungho.jp/torihiki/index.php?item=995&world=15" target="_blank">ミスティックフローズン</a></td>
+						<td id="p_EnchantedStoneCraftBrewingRate_1" class="numeric">-</td>
+						<td id="p_EnchantedStoneCraftCost_1"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_EnchantedStoneCraftItemName_2" href="https://rotool.gungho.jp/torihiki/index.php?item=996&world=15" target="_blank">ラフウィンド</a></td>
+						<td id="p_EnchantedStoneCraftBrewingRate_2" class="numeric">-</td>
+						<td id="p_EnchantedStoneCraftCost_2"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_EnchantedStoneCraftItemName_3" href="https://rotool.gungho.jp/torihiki/index.php?item=997&world=15" target="_blank">グレイドネイチャ</a></td>
+						<td id="p_EnchantedStoneCraftBrewingRate_3" class="numeric">-</td>
+						<td id="p_EnchantedStoneCraftCost_3"        class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_EnchantedStoneCraftItemName_4" href="https://rotool.gungho.jp/torihiki/index.php?item=1000&world=15" target="_blank">星のかけら</a></td>
+						<td id="p_EnchantedStoneCraftBrewingRate_4" class="numeric">-</td>
+						<td id="p_EnchantedStoneCraftCost_4"        class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>鉄製造成功率 ＝ [45 ＋ (鉄製造Lv × 5) ＋ (JobLv × 0.2) (DEX × 0.1) ＋ (LUK × 0.1)]%</div>
+			<div>鋼鉄製造成功率 ＝ [35 ＋ (鋼鉄製造Lv × 5) ＋ (JobLv × 0.2) (DEX × 0.1) ＋ (LUK × 0.1)]%</div>
+			<div>属性石製造成功率 ＝ [15 ＋ (属性石製造Lv × 5) ＋ (JobLv × 0.2) (DEX × 0.1) ＋ (LUK × 0.1)]%</div>
+			<div>※メカニックによるJobLvボーナスは適用されない</div>
+		</div>
+
+		<!-- 短剣製作 タブ -->
+		<div id="mainTabs-SmithDagger">
+			<h3>アイテム一覧</h3>
+			<div id="smithDaggerTabs">
+				<ul>
+					<li><a href="#smithDaggerTabs-OP0">オプション0個</a></li>
+					<li><a href="#smithDaggerTabs-OP1">オプション1個</a></li>
+					<li><a href="#smithDaggerTabs-OP2">オプション2個</a></li>
+					<li><a href="#smithDaggerTabs-OP3">オプション3個</a></li>
+				</ul>
+
+				<!-- オプション0個 -->
+				<div id="smithDaggerTabs-OP0">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>0:オプションなし</th>
+								<th>0:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_0" href="https://rotool.gungho.jp/torihiki/index.php?item=1201&make_flag=1&world=15" target="_blank">ナイフ</a></td>
+								<td id="p_SmithBrewingRate_C0_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_0" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_1" href="https://rotool.gungho.jp/torihiki/index.php?item=1204&make_flag=1&world=15" target="_blank">カッター</a></td>
+								<td id="p_SmithBrewingRate_C0_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_1" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_2" href="https://rotool.gungho.jp/torihiki/index.php?item=1207&make_flag=1&world=15" target="_blank">マインゴーシュ</a></td>
+								<td id="p_SmithBrewingRate_C0_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_2" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_3" href="https://rotool.gungho.jp/torihiki/index.php?item=1210&make_flag=1&world=15" target="_blank">ダーク</a></td>
+								<td id="p_SmithBrewingRate_C0_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_3" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_4" href="https://rotool.gungho.jp/torihiki/index.php?item=1213&make_flag=1&world=15" target="_blank">ダガー</a></td>
+								<td id="p_SmithBrewingRate_C0_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_4" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_5" href="https://rotool.gungho.jp/torihiki/index.php?item=1216&make_flag=1&world=15" target="_blank">スティレット</a></td>
+								<td id="p_SmithBrewingRate_C0_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_5" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_6" href="https://rotool.gungho.jp/torihiki/index.php?item=1219&make_flag=1&world=15" target="_blank">グラディウス</a></td>
+								<td id="p_SmithBrewingRate_C0_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_6" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_7" href="https://rotool.gungho.jp/torihiki/index.php?item=1222&make_flag=1&world=15" target="_blank">ダマスカス</a></td>
+								<td id="p_SmithBrewingRate_C0_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_7" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション1個 -->
+				<div id="smithDaggerTabs-OP1">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>1:火</th>
+								<th>1:原価(Zeny)</th>
+								<th>2:水</th>
+								<th>2:原価(Zeny)</th>
+								<th>3:風</th>
+								<th>3:原価(Zeny)</th>
+								<th>4:地</th>
+								<th>4:原価(Zeny)</th>
+								<th>5:★</th>
+								<th>5:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_0" href="https://rotool.gungho.jp/torihiki/index.php?item=1201&make_flag=1&world=15" target="_blank">ナイフ</a></td>
+								<td id="p_SmithBrewingRate_C1_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_0" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_1" href="https://rotool.gungho.jp/torihiki/index.php?item=1204&make_flag=1&world=15" target="_blank">カッター</a></td>
+								<td id="p_SmithBrewingRate_C1_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_1" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_2" href="https://rotool.gungho.jp/torihiki/index.php?item=1207&make_flag=1&world=15" target="_blank">マインゴーシュ</a></td>
+								<td id="p_SmithBrewingRate_C1_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_2" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_3" href="https://rotool.gungho.jp/torihiki/index.php?item=1210&make_flag=1&world=15" target="_blank">ダーク</a></td>
+								<td id="p_SmithBrewingRate_C1_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_3" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_4" href="https://rotool.gungho.jp/torihiki/index.php?item=1213&make_flag=1&world=15" target="_blank">ダガー</a></td>
+								<td id="p_SmithBrewingRate_C1_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_4" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_5" href="https://rotool.gungho.jp/torihiki/index.php?item=1216&make_flag=1&world=15" target="_blank">スティレット</a></td>
+								<td id="p_SmithBrewingRate_C1_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_5" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_6" href="https://rotool.gungho.jp/torihiki/index.php?item=1219&make_flag=1&world=15" target="_blank">グラディウス</a></td>
+								<td id="p_SmithBrewingRate_C1_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_6" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_7" href="https://rotool.gungho.jp/torihiki/index.php?item=1222&make_flag=1&world=15" target="_blank">ダマスカス</a></td>
+								<td id="p_SmithBrewingRate_C1_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_7" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション2個 -->
+				<div id="smithDaggerTabs-OP2">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>6:火★</th>
+								<th>6:原価(Zeny)</th>
+								<th>7:水★</th>
+								<th>7:原価(Zeny)</th>
+								<th>8:風★</th>
+								<th>8:原価(Zeny)</th>
+								<th>9:地★</th>
+								<th>9:原価(Zeny)</th>
+								<th>10:★★</th>
+								<th>10:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_0" href="https://rotool.gungho.jp/torihiki/index.php?item=1201&make_flag=1&world=15" target="_blank">ナイフ</a></td>
+								<td id="p_SmithBrewingRate_C6_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_0" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_1" href="https://rotool.gungho.jp/torihiki/index.php?item=1204&make_flag=1&world=15" target="_blank">カッター</a></td>
+								<td id="p_SmithBrewingRate_C6_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_1" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_2" href="https://rotool.gungho.jp/torihiki/index.php?item=1207&make_flag=1&world=15" target="_blank">マインゴーシュ</a></td>
+								<td id="p_SmithBrewingRate_C6_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_2" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_3" href="https://rotool.gungho.jp/torihiki/index.php?item=1210&make_flag=1&world=15" target="_blank">ダーク</a></td>
+								<td id="p_SmithBrewingRate_C6_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_3" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_4" href="https://rotool.gungho.jp/torihiki/index.php?item=1213&make_flag=1&world=15" target="_blank">ダガー</a></td>
+								<td id="p_SmithBrewingRate_C6_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_4" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_5" href="https://rotool.gungho.jp/torihiki/index.php?item=1216&make_flag=1&world=15" target="_blank">スティレット</a></td>
+								<td id="p_SmithBrewingRate_C6_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_5" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_6" href="https://rotool.gungho.jp/torihiki/index.php?item=1219&make_flag=1&world=15" target="_blank">グラディウス</a></td>
+								<td id="p_SmithBrewingRate_C6_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_6" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_7" href="https://rotool.gungho.jp/torihiki/index.php?item=1222&make_flag=1&world=15" target="_blank">ダマスカス</a></td>
+								<td id="p_SmithBrewingRate_C6_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_7" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション3個 -->
+				<div id="smithDaggerTabs-OP3">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>11:火★★</th>
+								<th>11:原価(Zeny)</th>
+								<th>12:水★★</th>
+								<th>12:原価(Zeny)</th>
+								<th>13:風★★</th>
+								<th>13:原価(Zeny)</th>
+								<th>14:地★★</th>
+								<th>14:原価(Zeny)</th>
+								<th>15:★★★</th>
+								<th>15:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_0" href="https://rotool.gungho.jp/torihiki/index.php?item=1201&make_flag=1&world=15" target="_blank">ナイフ</a></td>
+								<td id="p_SmithBrewingRate_C11_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_0" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_0" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_0" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_1" href="https://rotool.gungho.jp/torihiki/index.php?item=1204&make_flag=1&world=15" target="_blank">カッター</a></td>
+								<td id="p_SmithBrewingRate_C11_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_1" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_1" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_1" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_2" href="https://rotool.gungho.jp/torihiki/index.php?item=1207&make_flag=1&world=15" target="_blank">マインゴーシュ</a></td>
+								<td id="p_SmithBrewingRate_C11_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_2" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_2" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_2" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_3" href="https://rotool.gungho.jp/torihiki/index.php?item=1210&make_flag=1&world=15" target="_blank">ダーク</a></td>
+								<td id="p_SmithBrewingRate_C11_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_3" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_3" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_3" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_4" href="https://rotool.gungho.jp/torihiki/index.php?item=1213&make_flag=1&world=15" target="_blank">ダガー</a></td>
+								<td id="p_SmithBrewingRate_C11_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_4" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_4" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_4" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_5" href="https://rotool.gungho.jp/torihiki/index.php?item=1216&make_flag=1&world=15" target="_blank">スティレット</a></td>
+								<td id="p_SmithBrewingRate_C11_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_5" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_5" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_5" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_6" href="https://rotool.gungho.jp/torihiki/index.php?item=1219&make_flag=1&world=15" target="_blank">グラディウス</a></td>
+								<td id="p_SmithBrewingRate_C11_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_6" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_6" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_6" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_7" href="https://rotool.gungho.jp/torihiki/index.php?item=1222&make_flag=1&world=15" target="_blank">ダマスカス</a></td>
+								<td id="p_SmithBrewingRate_C11_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_7" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_7" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_7" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [45 ＋ (短剣製作Lv × 5) ＋ (武器研究Lv) ＋ (金敷補正) ＋ IF(メカニック ? 4 ： 0) ＋ (JobLv × 0.2) ＋ (DEX × 0.1) ＋ (LUK × 0.1) ＋ (15 － 武器Lv × 15) － (属性石個数 × 25) － (星のかけら個数 × 15) ＋ Random[-5,5]]%</div>
+		</div>
+
+		<!-- 剣製作 タブ -->
+		<div id="mainTabs-SmithSword">
+			<h3>アイテム一覧</h3>
+			<div id="smithSwordTabs">
+				<ul>
+					<li><a href="#smithSwordTabs-OP0">オプション0個</a></li>
+					<li><a href="#smithSwordTabs-OP1">オプション1個</a></li>
+					<li><a href="#smithSwordTabs-OP2">オプション2個</a></li>
+					<li><a href="#smithSwordTabs-OP3">オプション3個</a></li>
+				</ul>
+
+				<!-- オプション0個 -->
+				<div id="smithSwordTabs-OP0">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>0:オプションなし</th>
+								<th>0:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_8" href="https://rotool.gungho.jp/torihiki/index.php?item=1101&make_flag=1&world=15" target="_blank">ソード</a></td>
+								<td id="p_SmithBrewingRate_C0_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_8" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_9" href="https://rotool.gungho.jp/torihiki/index.php?item=1104&make_flag=1&world=15" target="_blank">ファルシオン</a></td>
+								<td id="p_SmithBrewingRate_C0_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_9" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_10" href="https://rotool.gungho.jp/torihiki/index.php?item=1109&make_flag=1&world=15" target="_blank">ブレイド</a></td>
+								<td id="p_SmithBrewingRate_C0_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_10" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_11" href="https://rotool.gungho.jp/torihiki/index.php?item=1112&make_flag=1&world=15" target="_blank">レイピア</a></td>
+								<td id="p_SmithBrewingRate_C0_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_11" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_12" href="https://rotool.gungho.jp/torihiki/index.php?item=1113&make_flag=1&world=15" target="_blank">シミター</a></td>
+								<td id="p_SmithBrewingRate_C0_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_12" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_13" href="https://rotool.gungho.jp/torihiki/index.php?item=1122&make_flag=1&world=15" target="_blank">環頭太刀</a></td>
+								<td id="p_SmithBrewingRate_C0_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_13" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_14" href="https://rotool.gungho.jp/torihiki/index.php?item=1126&make_flag=1&world=15" target="_blank">サーベル</a></td>
+								<td id="p_SmithBrewingRate_C0_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_14" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_15" href="https://rotool.gungho.jp/torihiki/index.php?item=1123&make_flag=1&world=15" target="_blank">海東剣</a></td>
+								<td id="p_SmithBrewingRate_C0_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_15" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_16" href="https://rotool.gungho.jp/torihiki/index.php?item=1119&make_flag=1&world=15" target="_blank">ツルギ</a></td>
+								<td id="p_SmithBrewingRate_C0_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_16" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_17" href="https://rotool.gungho.jp/torihiki/index.php?item=1129&make_flag=1&world=15" target="_blank">フランベルジェ</a></td>
+								<td id="p_SmithBrewingRate_C0_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_17" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション1個 -->
+				<div id="smithSwordTabs-OP1">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>1:火</th>
+								<th>1:原価(Zeny)</th>
+								<th>2:水</th>
+								<th>2:原価(Zeny)</th>
+								<th>3:風</th>
+								<th>3:原価(Zeny)</th>
+								<th>4:地</th>
+								<th>4:原価(Zeny)</th>
+								<th>5:★</th>
+								<th>5:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_8" href="https://rotool.gungho.jp/torihiki/index.php?item=1101&make_flag=1&world=15" target="_blank">ソード</a></td>
+								<td id="p_SmithBrewingRate_C1_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_8" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_9" href="https://rotool.gungho.jp/torihiki/index.php?item=1104&make_flag=1&world=15" target="_blank">ファルシオン</a></td>
+								<td id="p_SmithBrewingRate_C1_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_9" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_10" href="https://rotool.gungho.jp/torihiki/index.php?item=1109&make_flag=1&world=15" target="_blank">ブレイド</a></td>
+								<td id="p_SmithBrewingRate_C1_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_10" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_11" href="https://rotool.gungho.jp/torihiki/index.php?item=1112&make_flag=1&world=15" target="_blank">レイピア</a></td>
+								<td id="p_SmithBrewingRate_C1_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_11" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_12" href="https://rotool.gungho.jp/torihiki/index.php?item=1113&make_flag=1&world=15" target="_blank">シミター</a></td>
+								<td id="p_SmithBrewingRate_C1_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_12" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_13" href="https://rotool.gungho.jp/torihiki/index.php?item=1122&make_flag=1&world=15" target="_blank">環頭太刀</a></td>
+								<td id="p_SmithBrewingRate_C1_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_13" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_14" href="https://rotool.gungho.jp/torihiki/index.php?item=1126&make_flag=1&world=15" target="_blank">サーベル</a></td>
+								<td id="p_SmithBrewingRate_C1_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_14" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_15" href="https://rotool.gungho.jp/torihiki/index.php?item=1123&make_flag=1&world=15" target="_blank">海東剣</a></td>
+								<td id="p_SmithBrewingRate_C1_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_15" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_16" href="https://rotool.gungho.jp/torihiki/index.php?item=1119&make_flag=1&world=15" target="_blank">ツルギ</a></td>
+								<td id="p_SmithBrewingRate_C1_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_16" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_17" href="https://rotool.gungho.jp/torihiki/index.php?item=1129&make_flag=1&world=15" target="_blank">フランベルジェ</a></td>
+								<td id="p_SmithBrewingRate_C1_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_17" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション2個 -->
+				<div id="smithSwordTabs-OP2">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>6:火★</th>
+								<th>6:原価(Zeny)</th>
+								<th>7:水★</th>
+								<th>7:原価(Zeny)</th>
+								<th>8:風★</th>
+								<th>8:原価(Zeny)</th>
+								<th>9:地★</th>
+								<th>9:原価(Zeny)</th>
+								<th>10:★★</th>
+								<th>10:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_8" href="https://rotool.gungho.jp/torihiki/index.php?item=1101&make_flag=1&world=15" target="_blank">ソード</a></td>
+								<td id="p_SmithBrewingRate_C6_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_8" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_9" href="https://rotool.gungho.jp/torihiki/index.php?item=1104&make_flag=1&world=15" target="_blank">ファルシオン</a></td>
+								<td id="p_SmithBrewingRate_C6_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_9" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_10" href="https://rotool.gungho.jp/torihiki/index.php?item=1109&make_flag=1&world=15" target="_blank">ブレイド</a></td>
+								<td id="p_SmithBrewingRate_C6_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_10" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_11" href="https://rotool.gungho.jp/torihiki/index.php?item=1112&make_flag=1&world=15" target="_blank">レイピア</a></td>
+								<td id="p_SmithBrewingRate_C6_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_11" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_12" href="https://rotool.gungho.jp/torihiki/index.php?item=1113&make_flag=1&world=15" target="_blank">シミター</a></td>
+								<td id="p_SmithBrewingRate_C6_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_12" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_13" href="https://rotool.gungho.jp/torihiki/index.php?item=1122&make_flag=1&world=15" target="_blank">環頭太刀</a></td>
+								<td id="p_SmithBrewingRate_C6_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_13" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_14" href="https://rotool.gungho.jp/torihiki/index.php?item=1126&make_flag=1&world=15" target="_blank">サーベル</a></td>
+								<td id="p_SmithBrewingRate_C6_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_14" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_15" href="https://rotool.gungho.jp/torihiki/index.php?item=1123&make_flag=1&world=15" target="_blank">海東剣</a></td>
+								<td id="p_SmithBrewingRate_C6_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_15" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_16" href="https://rotool.gungho.jp/torihiki/index.php?item=1119&make_flag=1&world=15" target="_blank">ツルギ</a></td>
+								<td id="p_SmithBrewingRate_C6_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_16" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_17" href="https://rotool.gungho.jp/torihiki/index.php?item=1129&make_flag=1&world=15" target="_blank">フランベルジェ</a></td>
+								<td id="p_SmithBrewingRate_C6_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_17" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション3個 -->
+				<div id="smithSwordTabs-OP3">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>11:火★★</th>
+								<th>11:原価(Zeny)</th>
+								<th>12:水★★</th>
+								<th>12:原価(Zeny)</th>
+								<th>13:風★★</th>
+								<th>13:原価(Zeny)</th>
+								<th>14:地★★</th>
+								<th>14:原価(Zeny)</th>
+								<th>15:★★★</th>
+								<th>15:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_8" href="https://rotool.gungho.jp/torihiki/index.php?item=1101&make_flag=1&world=15" target="_blank">ソード</a></td>
+								<td id="p_SmithBrewingRate_C11_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_8" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_8" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_8" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_9" href="https://rotool.gungho.jp/torihiki/index.php?item=1104&make_flag=1&world=15" target="_blank">ファルシオン</a></td>
+								<td id="p_SmithBrewingRate_C11_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_9" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_9" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_9" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_10" href="https://rotool.gungho.jp/torihiki/index.php?item=1109&make_flag=1&world=15" target="_blank">ブレイド</a></td>
+								<td id="p_SmithBrewingRate_C11_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_10" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_10" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_10" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_11" href="https://rotool.gungho.jp/torihiki/index.php?item=1112&make_flag=1&world=15" target="_blank">レイピア</a></td>
+								<td id="p_SmithBrewingRate_C11_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_11" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_11" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_11" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_12" href="https://rotool.gungho.jp/torihiki/index.php?item=1113&make_flag=1&world=15" target="_blank">シミター</a></td>
+								<td id="p_SmithBrewingRate_C11_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_12" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_12" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_12" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_13" href="https://rotool.gungho.jp/torihiki/index.php?item=1122&make_flag=1&world=15" target="_blank">環頭太刀</a></td>
+								<td id="p_SmithBrewingRate_C11_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_13" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_13" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_13" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_14" href="https://rotool.gungho.jp/torihiki/index.php?item=1126&make_flag=1&world=15" target="_blank">サーベル</a></td>
+								<td id="p_SmithBrewingRate_C11_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_14" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_14" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_14" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_15" href="https://rotool.gungho.jp/torihiki/index.php?item=1123&make_flag=1&world=15" target="_blank">海東剣</a></td>
+								<td id="p_SmithBrewingRate_C11_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_15" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_15" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_15" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_16" href="https://rotool.gungho.jp/torihiki/index.php?item=1119&make_flag=1&world=15" target="_blank">ツルギ</a></td>
+								<td id="p_SmithBrewingRate_C11_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_16" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_16" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_16" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_17" href="https://rotool.gungho.jp/torihiki/index.php?item=1129&make_flag=1&world=15" target="_blank">フランベルジェ</a></td>
+								<td id="p_SmithBrewingRate_C11_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_17" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_17" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_17" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [45 ＋ (剣製作Lv × 5) ＋ (武器研究Lv) ＋ (金敷補正) ＋ IF(メカニック ? 4 ： 0) ＋ (JobLv × 0.2) ＋ (DEX × 0.1) ＋ (LUK × 0.1) ＋ (15 － 武器Lv × 15) － (属性石個数 × 25) － (星のかけら個数 × 15) ＋ Random[-5,5]]%</div>
+		</div>
+
+		<!-- 両手剣製作 タブ -->
+		<div id="mainTabs-SmithTwoHandedSword">
+			<h3>アイテム一覧</h3>
+			<div id="smithTwoHandedSwordTabs">
+				<ul>
+					<li><a href="#smithTwoHandedSwordTabs-OP0">オプション0個</a></li>
+					<li><a href="#smithTwoHandedSwordTabs-OP1">オプション1個</a></li>
+					<li><a href="#smithTwoHandedSwordTabs-OP2">オプション2個</a></li>
+					<li><a href="#smithTwoHandedSwordTabs-OP3">オプション3個</a></li>
+				</ul>
+
+				<!-- オプション0個 -->
+				<div id="smithTwoHandedSwordTabs-OP0">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>0:オプションなし</th>
+								<th>0:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_18" href="https://rotool.gungho.jp/torihiki/index.php?item=1116&make_flag=1&world=15" target="_blank">カタナ</a></td>
+								<td id="p_SmithBrewingRate_C0_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_18" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_19" href="https://rotool.gungho.jp/torihiki/index.php?item=1151&make_flag=1&world=15" target="_blank">スレイヤー</a></td>
+								<td id="p_SmithBrewingRate_C0_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_19" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_20" href="https://rotool.gungho.jp/torihiki/index.php?item=1154&make_flag=1&world=15" target="_blank">バスタードソード</a></td>
+								<td id="p_SmithBrewingRate_C0_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_20" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_21" href="https://rotool.gungho.jp/torihiki/index.php?item=1157&make_flag=1&world=15" target="_blank">ツーハンドソード</a></td>
+								<td id="p_SmithBrewingRate_C0_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_21" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_22" href="https://rotool.gungho.jp/torihiki/index.php?item=1160&make_flag=1&world=15" target="_blank">ブロードソード</a></td>
+								<td id="p_SmithBrewingRate_C0_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_22" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_23" href="https://rotool.gungho.jp/torihiki/index.php?item=1163&make_flag=1&world=15" target="_blank">クレイモア</a></td>
+								<td id="p_SmithBrewingRate_C0_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_23" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション1個 -->
+				<div id="smithTwoHandedSwordTabs-OP1">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>1:火</th>
+								<th>1:原価(Zeny)</th>
+								<th>2:水</th>
+								<th>2:原価(Zeny)</th>
+								<th>3:風</th>
+								<th>3:原価(Zeny)</th>
+								<th>4:地</th>
+								<th>4:原価(Zeny)</th>
+								<th>5:★</th>
+								<th>5:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_18" href="https://rotool.gungho.jp/torihiki/index.php?item=1116&make_flag=1&world=15" target="_blank">カタナ</a></td>
+								<td id="p_SmithBrewingRate_C1_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_18" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_19" href="https://rotool.gungho.jp/torihiki/index.php?item=1151&make_flag=1&world=15" target="_blank">スレイヤー</a></td>
+								<td id="p_SmithBrewingRate_C1_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_19" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_20" href="https://rotool.gungho.jp/torihiki/index.php?item=1154&make_flag=1&world=15" target="_blank">バスタードソード</a></td>
+								<td id="p_SmithBrewingRate_C1_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_20" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_21" href="https://rotool.gungho.jp/torihiki/index.php?item=1157&make_flag=1&world=15" target="_blank">ツーハンドソード</a></td>
+								<td id="p_SmithBrewingRate_C1_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_21" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_22" href="https://rotool.gungho.jp/torihiki/index.php?item=1160&make_flag=1&world=15" target="_blank">ブロードソード</a></td>
+								<td id="p_SmithBrewingRate_C1_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_22" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_23" href="https://rotool.gungho.jp/torihiki/index.php?item=1163&make_flag=1&world=15" target="_blank">クレイモア</a></td>
+								<td id="p_SmithBrewingRate_C1_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_23" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション2個 -->
+				<div id="smithTwoHandedSwordTabs-OP2">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>6:火★</th>
+								<th>6:原価(Zeny)</th>
+								<th>7:水★</th>
+								<th>7:原価(Zeny)</th>
+								<th>8:風★</th>
+								<th>8:原価(Zeny)</th>
+								<th>9:地★</th>
+								<th>9:原価(Zeny)</th>
+								<th>10:★★</th>
+								<th>10:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_18" href="https://rotool.gungho.jp/torihiki/index.php?item=1116&make_flag=1&world=15" target="_blank">カタナ</a></td>
+								<td id="p_SmithBrewingRate_C6_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_18" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_19" href="https://rotool.gungho.jp/torihiki/index.php?item=1151&make_flag=1&world=15" target="_blank">スレイヤー</a></td>
+								<td id="p_SmithBrewingRate_C6_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_19" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_20" href="https://rotool.gungho.jp/torihiki/index.php?item=1154&make_flag=1&world=15" target="_blank">バスタードソード</a></td>
+								<td id="p_SmithBrewingRate_C6_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_20" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_21" href="https://rotool.gungho.jp/torihiki/index.php?item=1157&make_flag=1&world=15" target="_blank">ツーハンドソード</a></td>
+								<td id="p_SmithBrewingRate_C6_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_21" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_22" href="https://rotool.gungho.jp/torihiki/index.php?item=1160&make_flag=1&world=15" target="_blank">ブロードソード</a></td>
+								<td id="p_SmithBrewingRate_C6_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_22" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_23" href="https://rotool.gungho.jp/torihiki/index.php?item=1163&make_flag=1&world=15" target="_blank">クレイモア</a></td>
+								<td id="p_SmithBrewingRate_C6_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_23" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション3個 -->
+				<div id="smithTwoHandedSwordTabs-OP3">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>11:火★★</th>
+								<th>11:原価(Zeny)</th>
+								<th>12:水★★</th>
+								<th>12:原価(Zeny)</th>
+								<th>13:風★★</th>
+								<th>13:原価(Zeny)</th>
+								<th>14:地★★</th>
+								<th>14:原価(Zeny)</th>
+								<th>15:★★★</th>
+								<th>15:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_18" href="https://rotool.gungho.jp/torihiki/index.php?item=1116&make_flag=1&world=15" target="_blank">カタナ</a></td>
+								<td id="p_SmithBrewingRate_C11_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_18" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_18" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_18" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_19" href="https://rotool.gungho.jp/torihiki/index.php?item=1151&make_flag=1&world=15" target="_blank">スレイヤー</a></td>
+								<td id="p_SmithBrewingRate_C11_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_19" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_19" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_19" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_20" href="https://rotool.gungho.jp/torihiki/index.php?item=1154&make_flag=1&world=15" target="_blank">バスタードソード</a></td>
+								<td id="p_SmithBrewingRate_C11_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_20" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_20" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_20" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_21" href="https://rotool.gungho.jp/torihiki/index.php?item=1157&make_flag=1&world=15" target="_blank">ツーハンドソード</a></td>
+								<td id="p_SmithBrewingRate_C11_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_21" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_21" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_21" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_22" href="https://rotool.gungho.jp/torihiki/index.php?item=1160&make_flag=1&world=15" target="_blank">ブロードソード</a></td>
+								<td id="p_SmithBrewingRate_C11_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_22" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_22" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_22" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_23" href="https://rotool.gungho.jp/torihiki/index.php?item=1163&make_flag=1&world=15" target="_blank">クレイモア</a></td>
+								<td id="p_SmithBrewingRate_C11_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_23" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_23" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_23" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [45 ＋ (両手剣製作Lv × 5) ＋ (武器研究Lv) ＋ (金敷補正) ＋ IF(メカニック ? 4 ： 0) ＋ (JobLv × 0.2) ＋ (DEX × 0.1) ＋ (LUK × 0.1) ＋ (15 － 武器Lv × 15) － (属性石個数 × 25) － (星のかけら個数 × 15) ＋ Random[-5,5]]%</div>
+		</div>
+
+		<!-- 槍製作 タブ -->
+		<div id="mainTabs-SmithSpear">
+			<h3>アイテム一覧</h3>
+			<div id="smithSpearTabs">
+				<ul>
+					<li><a href="#smithSpearTabs-OP0">オプション0個</a></li>
+					<li><a href="#smithSpearTabs-OP1">オプション1個</a></li>
+					<li><a href="#smithSpearTabs-OP2">オプション2個</a></li>
+					<li><a href="#smithSpearTabs-OP3">オプション3個</a></li>
+				</ul>
+
+				<!-- オプション0個 -->
+				<div id="smithSpearTabs-OP0">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>0:オプションなし</th>
+								<th>0:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_24" href="https://rotool.gungho.jp/torihiki/index.php?item=1401&make_flag=1&world=15" target="_blank">ジャベリン</a></td>
+								<td id="p_SmithBrewingRate_C0_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_24" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_25" href="https://rotool.gungho.jp/torihiki/index.php?item=1404&make_flag=1&world=15" target="_blank">スピアー</a></td>
+								<td id="p_SmithBrewingRate_C0_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_25" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_26" href="https://rotool.gungho.jp/torihiki/index.php?item=1407&make_flag=1&world=15" target="_blank">パイク</a></td>
+								<td id="p_SmithBrewingRate_C0_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_26" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_27" href="https://rotool.gungho.jp/torihiki/index.php?item=1451&make_flag=1&world=15" target="_blank">ギザルム</a></td>
+								<td id="p_SmithBrewingRate_C0_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_27" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_28" href="https://rotool.gungho.jp/torihiki/index.php?item=1454&make_flag=1&world=15" target="_blank">グレイヴ</a></td>
+								<td id="p_SmithBrewingRate_C0_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_28" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_29" href="https://rotool.gungho.jp/torihiki/index.php?item=1457&make_flag=1&world=15" target="_blank">パルチザン</a></td>
+								<td id="p_SmithBrewingRate_C0_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_29" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_30" href="https://rotool.gungho.jp/torihiki/index.php?item=1460&make_flag=1&world=15" target="_blank">トライデント</a></td>
+								<td id="p_SmithBrewingRate_C0_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_30" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_31" href="https://rotool.gungho.jp/torihiki/index.php?item=1463&make_flag=1&world=15" target="_blank">ハルバード</a></td>
+								<td id="p_SmithBrewingRate_C0_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_31" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_32" href="https://rotool.gungho.jp/torihiki/index.php?item=1410&make_flag=1&world=15" target="_blank">ランス</a></td>
+								<td id="p_SmithBrewingRate_C0_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_32" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション1個 -->
+				<div id="smithSpearTabs-OP1">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>1:火</th>
+								<th>1:原価(Zeny)</th>
+								<th>2:水</th>
+								<th>2:原価(Zeny)</th>
+								<th>3:風</th>
+								<th>3:原価(Zeny)</th>
+								<th>4:地</th>
+								<th>4:原価(Zeny)</th>
+								<th>5:★</th>
+								<th>5:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_24" href="https://rotool.gungho.jp/torihiki/index.php?item=1401&make_flag=1&world=15" target="_blank">ジャベリン</a></td>
+								<td id="p_SmithBrewingRate_C1_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_24" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_25" href="https://rotool.gungho.jp/torihiki/index.php?item=1404&make_flag=1&world=15" target="_blank">スピアー</a></td>
+								<td id="p_SmithBrewingRate_C1_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_25" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_26" href="https://rotool.gungho.jp/torihiki/index.php?item=1407&make_flag=1&world=15" target="_blank">パイク</a></td>
+								<td id="p_SmithBrewingRate_C1_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_26" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_27" href="https://rotool.gungho.jp/torihiki/index.php?item=1451&make_flag=1&world=15" target="_blank">ギザルム</a></td>
+								<td id="p_SmithBrewingRate_C1_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_27" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_28" href="https://rotool.gungho.jp/torihiki/index.php?item=1454&make_flag=1&world=15" target="_blank">グレイヴ</a></td>
+								<td id="p_SmithBrewingRate_C1_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_28" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_29" href="https://rotool.gungho.jp/torihiki/index.php?item=1457&make_flag=1&world=15" target="_blank">パルチザン</a></td>
+								<td id="p_SmithBrewingRate_C1_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_29" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_30" href="https://rotool.gungho.jp/torihiki/index.php?item=1460&make_flag=1&world=15" target="_blank">トライデント</a></td>
+								<td id="p_SmithBrewingRate_C1_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_30" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_31" href="https://rotool.gungho.jp/torihiki/index.php?item=1463&make_flag=1&world=15" target="_blank">ハルバード</a></td>
+								<td id="p_SmithBrewingRate_C1_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_31" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_32" href="https://rotool.gungho.jp/torihiki/index.php?item=1410&make_flag=1&world=15" target="_blank">ランス</a></td>
+								<td id="p_SmithBrewingRate_C1_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_32" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション2個 -->
+				<div id="smithSpearTabs-OP2">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>6:火★</th>
+								<th>6:原価(Zeny)</th>
+								<th>7:水★</th>
+								<th>7:原価(Zeny)</th>
+								<th>8:風★</th>
+								<th>8:原価(Zeny)</th>
+								<th>9:地★</th>
+								<th>9:原価(Zeny)</th>
+								<th>10:★★</th>
+								<th>10:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_24" href="https://rotool.gungho.jp/torihiki/index.php?item=1401&make_flag=1&world=15" target="_blank">ジャベリン</a></td>
+								<td id="p_SmithBrewingRate_C6_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_24" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_25" href="https://rotool.gungho.jp/torihiki/index.php?item=1404&make_flag=1&world=15" target="_blank">スピアー</a></td>
+								<td id="p_SmithBrewingRate_C6_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_25" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_26" href="https://rotool.gungho.jp/torihiki/index.php?item=1407&make_flag=1&world=15" target="_blank">パイク</a></td>
+								<td id="p_SmithBrewingRate_C6_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_26" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_27" href="https://rotool.gungho.jp/torihiki/index.php?item=1451&make_flag=1&world=15" target="_blank">ギザルム</a></td>
+								<td id="p_SmithBrewingRate_C6_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_27" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_28" href="https://rotool.gungho.jp/torihiki/index.php?item=1454&make_flag=1&world=15" target="_blank">グレイヴ</a></td>
+								<td id="p_SmithBrewingRate_C6_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_28" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_29" href="https://rotool.gungho.jp/torihiki/index.php?item=1457&make_flag=1&world=15" target="_blank">パルチザン</a></td>
+								<td id="p_SmithBrewingRate_C6_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_29" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_30" href="https://rotool.gungho.jp/torihiki/index.php?item=1460&make_flag=1&world=15" target="_blank">トライデント</a></td>
+								<td id="p_SmithBrewingRate_C6_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_30" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_31" href="https://rotool.gungho.jp/torihiki/index.php?item=1463&make_flag=1&world=15" target="_blank">ハルバード</a></td>
+								<td id="p_SmithBrewingRate_C6_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_31" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_32" href="https://rotool.gungho.jp/torihiki/index.php?item=1410&make_flag=1&world=15" target="_blank">ランス</a></td>
+								<td id="p_SmithBrewingRate_C6_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_32" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション3個 -->
+				<div id="smithSpearTabs-OP3">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>11:火★★</th>
+								<th>11:原価(Zeny)</th>
+								<th>12:水★★</th>
+								<th>12:原価(Zeny)</th>
+								<th>13:風★★</th>
+								<th>13:原価(Zeny)</th>
+								<th>14:地★★</th>
+								<th>14:原価(Zeny)</th>
+								<th>15:★★★</th>
+								<th>15:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_24" href="https://rotool.gungho.jp/torihiki/index.php?item=1401&make_flag=1&world=15" target="_blank">ジャベリン</a></td>
+								<td id="p_SmithBrewingRate_C11_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_24" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_24" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_24" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_25" href="https://rotool.gungho.jp/torihiki/index.php?item=1404&make_flag=1&world=15" target="_blank">スピアー</a></td>
+								<td id="p_SmithBrewingRate_C11_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_25" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_25" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_25" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_26" href="https://rotool.gungho.jp/torihiki/index.php?item=1407&make_flag=1&world=15" target="_blank">パイク</a></td>
+								<td id="p_SmithBrewingRate_C11_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_26" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_26" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_26" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_27" href="https://rotool.gungho.jp/torihiki/index.php?item=1451&make_flag=1&world=15" target="_blank">ギザルム</a></td>
+								<td id="p_SmithBrewingRate_C11_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_27" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_27" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_27" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_28" href="https://rotool.gungho.jp/torihiki/index.php?item=1454&make_flag=1&world=15" target="_blank">グレイヴ</a></td>
+								<td id="p_SmithBrewingRate_C11_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_28" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_28" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_28" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_29" href="https://rotool.gungho.jp/torihiki/index.php?item=1457&make_flag=1&world=15" target="_blank">パルチザン</a></td>
+								<td id="p_SmithBrewingRate_C11_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_29" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_29" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_29" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_30" href="https://rotool.gungho.jp/torihiki/index.php?item=1460&make_flag=1&world=15" target="_blank">トライデント</a></td>
+								<td id="p_SmithBrewingRate_C11_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_30" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_30" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_30" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_31" href="https://rotool.gungho.jp/torihiki/index.php?item=1463&make_flag=1&world=15" target="_blank">ハルバード</a></td>
+								<td id="p_SmithBrewingRate_C11_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_31" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_31" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_31" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_32" href="https://rotool.gungho.jp/torihiki/index.php?item=1410&make_flag=1&world=15" target="_blank">ランス</a></td>
+								<td id="p_SmithBrewingRate_C11_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_32" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_32" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_32" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [45 ＋ (槍製作Lv × 5) ＋ (武器研究Lv) ＋ (金敷補正) ＋ IF(メカニック ? 4 ： 0) ＋ (JobLv × 0.2) ＋ (DEX × 0.1) ＋ (LUK × 0.1) ＋ (15 － 武器Lv × 15) － (属性石個数 × 25) － (星のかけら個数 × 15) ＋ Random[-5,5]]%</div>
+		</div>
+
+		<!-- 斧製作 タブ -->
+		<div id="mainTabs-SmithAxe">
+			<h3>アイテム一覧</h3>
+			<div id="smithAxeTabs">
+				<ul>
+					<li><a href="#smithAxeTabs-OP0">オプション0個</a></li>
+					<li><a href="#smithAxeTabs-OP1">オプション1個</a></li>
+					<li><a href="#smithAxeTabs-OP2">オプション2個</a></li>
+					<li><a href="#smithAxeTabs-OP3">オプション3個</a></li>
+				</ul>
+
+				<!-- オプション0個 -->
+				<div id="smithAxeTabs-OP0">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>0:オプションなし</th>
+								<th>0:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_33" href="https://rotool.gungho.jp/torihiki/index.php?item=1301&make_flag=1&world=15" target="_blank">アックス</a></td>
+								<td id="p_SmithBrewingRate_C0_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_33" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_34" href="https://rotool.gungho.jp/torihiki/index.php?item=1351&make_flag=1&world=15" target="_blank">バトルアックス</a></td>
+								<td id="p_SmithBrewingRate_C0_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_34" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_35" href="https://rotool.gungho.jp/torihiki/index.php?item=1354&make_flag=1&world=15" target="_blank">ハンマー</a></td>
+								<td id="p_SmithBrewingRate_C0_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_35" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_36" href="https://rotool.gungho.jp/torihiki/index.php?item=1357&make_flag=1&world=15" target="_blank">バスター</a></td>
+								<td id="p_SmithBrewingRate_C0_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_36" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_37" href="https://rotool.gungho.jp/torihiki/index.php?item=1360&make_flag=1&world=15" target="_blank">ツーハンドアックス</a></td>
+								<td id="p_SmithBrewingRate_C0_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_37" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション1個 -->
+				<div id="smithAxeTabs-OP1">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>1:火</th>
+								<th>1:原価(Zeny)</th>
+								<th>2:水</th>
+								<th>2:原価(Zeny)</th>
+								<th>3:風</th>
+								<th>3:原価(Zeny)</th>
+								<th>4:地</th>
+								<th>4:原価(Zeny)</th>
+								<th>5:★</th>
+								<th>5:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_33" href="https://rotool.gungho.jp/torihiki/index.php?item=1301&make_flag=1&world=15" target="_blank">アックス</a></td>
+								<td id="p_SmithBrewingRate_C1_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_33" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_34" href="https://rotool.gungho.jp/torihiki/index.php?item=1351&make_flag=1&world=15" target="_blank">バトルアックス</a></td>
+								<td id="p_SmithBrewingRate_C1_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_34" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_35" href="https://rotool.gungho.jp/torihiki/index.php?item=1354&make_flag=1&world=15" target="_blank">ハンマー</a></td>
+								<td id="p_SmithBrewingRate_C1_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_35" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_36" href="https://rotool.gungho.jp/torihiki/index.php?item=1357&make_flag=1&world=15" target="_blank">バスター</a></td>
+								<td id="p_SmithBrewingRate_C1_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_36" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_37" href="https://rotool.gungho.jp/torihiki/index.php?item=1360&make_flag=1&world=15" target="_blank">ツーハンドアックス</a></td>
+								<td id="p_SmithBrewingRate_C1_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_37" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション2個 -->
+				<div id="smithAxeTabs-OP2">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>6:火★</th>
+								<th>6:原価(Zeny)</th>
+								<th>7:水★</th>
+								<th>7:原価(Zeny)</th>
+								<th>8:風★</th>
+								<th>8:原価(Zeny)</th>
+								<th>9:地★</th>
+								<th>9:原価(Zeny)</th>
+								<th>10:★★</th>
+								<th>10:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_33" href="https://rotool.gungho.jp/torihiki/index.php?item=1301&make_flag=1&world=15" target="_blank">アックス</a></td>
+								<td id="p_SmithBrewingRate_C6_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_33" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_34" href="https://rotool.gungho.jp/torihiki/index.php?item=1351&make_flag=1&world=15" target="_blank">バトルアックス</a></td>
+								<td id="p_SmithBrewingRate_C6_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_34" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_35" href="https://rotool.gungho.jp/torihiki/index.php?item=1354&make_flag=1&world=15" target="_blank">ハンマー</a></td>
+								<td id="p_SmithBrewingRate_C6_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_35" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_36" href="https://rotool.gungho.jp/torihiki/index.php?item=1357&make_flag=1&world=15" target="_blank">バスター</a></td>
+								<td id="p_SmithBrewingRate_C6_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_36" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_37" href="https://rotool.gungho.jp/torihiki/index.php?item=1360&make_flag=1&world=15" target="_blank">ツーハンドアックス</a></td>
+								<td id="p_SmithBrewingRate_C6_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_37" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション3個 -->
+				<div id="smithAxeTabs-OP3">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>11:火★★</th>
+								<th>11:原価(Zeny)</th>
+								<th>12:水★★</th>
+								<th>12:原価(Zeny)</th>
+								<th>13:風★★</th>
+								<th>13:原価(Zeny)</th>
+								<th>14:地★★</th>
+								<th>14:原価(Zeny)</th>
+								<th>15:★★★</th>
+								<th>15:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_33" href="https://rotool.gungho.jp/torihiki/index.php?item=1301&make_flag=1&world=15" target="_blank">アックス</a></td>
+								<td id="p_SmithBrewingRate_C11_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_33" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_33" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_33" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_34" href="https://rotool.gungho.jp/torihiki/index.php?item=1351&make_flag=1&world=15" target="_blank">バトルアックス</a></td>
+								<td id="p_SmithBrewingRate_C11_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_34" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_34" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_34" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_35" href="https://rotool.gungho.jp/torihiki/index.php?item=1354&make_flag=1&world=15" target="_blank">ハンマー</a></td>
+								<td id="p_SmithBrewingRate_C11_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_35" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_35" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_35" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_36" href="https://rotool.gungho.jp/torihiki/index.php?item=1357&make_flag=1&world=15" target="_blank">バスター</a></td>
+								<td id="p_SmithBrewingRate_C11_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_36" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_36" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_36" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_37" href="https://rotool.gungho.jp/torihiki/index.php?item=1360&make_flag=1&world=15" target="_blank">ツーハンドアックス</a></td>
+								<td id="p_SmithBrewingRate_C11_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_37" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_37" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_37" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [45 ＋ (斧製作Lv × 5) ＋ (武器研究Lv) ＋ (金敷補正) ＋ IF(メカニック ? 4 ： 0) ＋ (JobLv × 0.2) ＋ (DEX × 0.1) ＋ (LUK × 0.1) ＋ (15 － 武器Lv × 15) － (属性石個数 × 25) － (星のかけら個数 × 15) ＋ Random[-5,5]]%</div>
+		</div>
+
+		<!-- ナックル製作 タブ -->
+		<div id="mainTabs-SmithBrassKnuckle">
+			<h3>アイテム一覧</h3>
+			<div id="smithBrassKnuckleTabs">
+				<ul>
+					<li><a href="#smithBrassKnuckleTabs-OP0">オプション0個</a></li>
+					<li><a href="#smithBrassKnuckleTabs-OP1">オプション1個</a></li>
+					<li><a href="#smithBrassKnuckleTabs-OP2">オプション2個</a></li>
+					<li><a href="#smithBrassKnuckleTabs-OP3">オプション3個</a></li>
+				</ul>
+
+				<!-- オプション0個 -->
+				<div id="smithBrassKnuckleTabs-OP0">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>0:オプションなし</th>
+								<th>0:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_38" href="https://rotool.gungho.jp/torihiki/index.php?item=1801&make_flag=1&world=15" target="_blank">バグナウ</a></td>
+								<td id="p_SmithBrewingRate_C0_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_38" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_39" href="https://rotool.gungho.jp/torihiki/index.php?item=1803&make_flag=1&world=15" target="_blank">ナックルダスター</a></td>
+								<td id="p_SmithBrewingRate_C0_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_39" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_40" href="https://rotool.gungho.jp/torihiki/index.php?item=1805&make_flag=1&world=15" target="_blank">ホラ</a></td>
+								<td id="p_SmithBrewingRate_C0_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_40" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_41" href="https://rotool.gungho.jp/torihiki/index.php?item=1807&make_flag=1&world=15" target="_blank">フィスト</a></td>
+								<td id="p_SmithBrewingRate_C0_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_41" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_42" href="https://rotool.gungho.jp/torihiki/index.php?item=1809&make_flag=1&world=15" target="_blank">クロー</a></td>
+								<td id="p_SmithBrewingRate_C0_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_42" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_43" href="https://rotool.gungho.jp/torihiki/index.php?item=1811&make_flag=1&world=15" target="_blank">フィンガー</a></td>
+								<td id="p_SmithBrewingRate_C0_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_43" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション1個 -->
+				<div id="smithBrassKnuckleTabs-OP1">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>1:火</th>
+								<th>1:原価(Zeny)</th>
+								<th>2:水</th>
+								<th>2:原価(Zeny)</th>
+								<th>3:風</th>
+								<th>3:原価(Zeny)</th>
+								<th>4:地</th>
+								<th>4:原価(Zeny)</th>
+								<th>5:★</th>
+								<th>5:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_38" href="https://rotool.gungho.jp/torihiki/index.php?item=1801&make_flag=1&world=15" target="_blank">バグナウ</a></td>
+								<td id="p_SmithBrewingRate_C1_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_38" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_39" href="https://rotool.gungho.jp/torihiki/index.php?item=1803&make_flag=1&world=15" target="_blank">ナックルダスター</a></td>
+								<td id="p_SmithBrewingRate_C1_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_39" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_40" href="https://rotool.gungho.jp/torihiki/index.php?item=1805&make_flag=1&world=15" target="_blank">ホラ</a></td>
+								<td id="p_SmithBrewingRate_C1_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_40" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_41" href="https://rotool.gungho.jp/torihiki/index.php?item=1807&make_flag=1&world=15" target="_blank">フィスト</a></td>
+								<td id="p_SmithBrewingRate_C1_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_41" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_42" href="https://rotool.gungho.jp/torihiki/index.php?item=1809&make_flag=1&world=15" target="_blank">クロー</a></td>
+								<td id="p_SmithBrewingRate_C1_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_42" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_43" href="https://rotool.gungho.jp/torihiki/index.php?item=1811&make_flag=1&world=15" target="_blank">フィンガー</a></td>
+								<td id="p_SmithBrewingRate_C1_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_43" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション2個 -->
+				<div id="smithBrassKnuckleTabs-OP2">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>6:火★</th>
+								<th>6:原価(Zeny)</th>
+								<th>7:水★</th>
+								<th>7:原価(Zeny)</th>
+								<th>8:風★</th>
+								<th>8:原価(Zeny)</th>
+								<th>9:地★</th>
+								<th>9:原価(Zeny)</th>
+								<th>10:★★</th>
+								<th>10:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_38" href="https://rotool.gungho.jp/torihiki/index.php?item=1801&make_flag=1&world=15" target="_blank">バグナウ</a></td>
+								<td id="p_SmithBrewingRate_C6_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_38" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_39" href="https://rotool.gungho.jp/torihiki/index.php?item=1803&make_flag=1&world=15" target="_blank">ナックルダスター</a></td>
+								<td id="p_SmithBrewingRate_C6_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_39" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_40" href="https://rotool.gungho.jp/torihiki/index.php?item=1805&make_flag=1&world=15" target="_blank">ホラ</a></td>
+								<td id="p_SmithBrewingRate_C6_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_40" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_41" href="https://rotool.gungho.jp/torihiki/index.php?item=1807&make_flag=1&world=15" target="_blank">フィスト</a></td>
+								<td id="p_SmithBrewingRate_C6_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_41" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_42" href="https://rotool.gungho.jp/torihiki/index.php?item=1809&make_flag=1&world=15" target="_blank">クロー</a></td>
+								<td id="p_SmithBrewingRate_C6_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_42" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_43" href="https://rotool.gungho.jp/torihiki/index.php?item=1811&make_flag=1&world=15" target="_blank">フィンガー</a></td>
+								<td id="p_SmithBrewingRate_C6_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_43" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション3個 -->
+				<div id="smithBrassKnuckleTabs-OP3">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>11:火★★</th>
+								<th>11:原価(Zeny)</th>
+								<th>12:水★★</th>
+								<th>12:原価(Zeny)</th>
+								<th>13:風★★</th>
+								<th>13:原価(Zeny)</th>
+								<th>14:地★★</th>
+								<th>14:原価(Zeny)</th>
+								<th>15:★★★</th>
+								<th>15:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_38" href="https://rotool.gungho.jp/torihiki/index.php?item=1801&make_flag=1&world=15" target="_blank">バグナウ</a></td>
+								<td id="p_SmithBrewingRate_C11_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_38" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_38" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_38" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_39" href="https://rotool.gungho.jp/torihiki/index.php?item=1803&make_flag=1&world=15" target="_blank">ナックルダスター</a></td>
+								<td id="p_SmithBrewingRate_C11_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_39" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_39" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_39" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_40" href="https://rotool.gungho.jp/torihiki/index.php?item=1805&make_flag=1&world=15" target="_blank">ホラ</a></td>
+								<td id="p_SmithBrewingRate_C11_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_40" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_40" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_40" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_41" href="https://rotool.gungho.jp/torihiki/index.php?item=1807&make_flag=1&world=15" target="_blank">フィスト</a></td>
+								<td id="p_SmithBrewingRate_C11_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_41" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_41" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_41" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_42" href="https://rotool.gungho.jp/torihiki/index.php?item=1809&make_flag=1&world=15" target="_blank">クロー</a></td>
+								<td id="p_SmithBrewingRate_C11_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_42" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_42" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_42" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_43" href="https://rotool.gungho.jp/torihiki/index.php?item=1811&make_flag=1&world=15" target="_blank">フィンガー</a></td>
+								<td id="p_SmithBrewingRate_C11_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_43" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_43" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_43" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [45 ＋ (ナックル製作Lv × 5) ＋ (武器研究Lv) ＋ (金敷補正) ＋ IF(メカニック ? 4 ： 0) ＋ (JobLv × 0.2) ＋ (DEX × 0.1) ＋ (LUK × 0.1) ＋ (15 － 武器Lv × 15) － (属性石個数 × 25) － (星のかけら個数 × 15) ＋ Random[-5,5]]%</div>
+		</div>
+
+		<!-- メイス製作 タブ -->
+		<div id="mainTabs-SmithMace">
+			<h3>アイテム一覧</h3>
+			<div id="smithMaceTabs">
+				<ul>
+					<li><a href="#smithMaceTabs-OP0">オプション0個</a></li>
+					<li><a href="#smithMaceTabs-OP1">オプション1個</a></li>
+					<li><a href="#smithMaceTabs-OP2">オプション2個</a></li>
+					<li><a href="#smithMaceTabs-OP3">オプション3個</a></li>
+				</ul>
+
+				<!-- オプション0個 -->
+				<div id="smithMaceTabs-OP0">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>0:オプションなし</th>
+								<th>0:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_44" href="https://rotool.gungho.jp/torihiki/index.php?item=1501&make_flag=1&world=15" target="_blank">クラブ</a></td>
+								<td id="p_SmithBrewingRate_C0_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_44" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_45" href="https://rotool.gungho.jp/torihiki/index.php?item=1504&make_flag=1&world=15" target="_blank">メイス</a></td>
+								<td id="p_SmithBrewingRate_C0_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_45" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_46" href="https://rotool.gungho.jp/torihiki/index.php?item=1507&make_flag=1&world=15" target="_blank">スマッシャー</a></td>
+								<td id="p_SmithBrewingRate_C0_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_46" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_47" href="https://rotool.gungho.jp/torihiki/index.php?item=1510&make_flag=1&world=15" target="_blank">フレイル</a></td>
+								<td id="p_SmithBrewingRate_C0_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_47" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_48" href="https://rotool.gungho.jp/torihiki/index.php?item=1519&make_flag=1&world=15" target="_blank">チェイン</a></td>
+								<td id="p_SmithBrewingRate_C0_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_48" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_49" href="https://rotool.gungho.jp/torihiki/index.php?item=1513&make_flag=1&world=15" target="_blank">モーニングスター</a></td>
+								<td id="p_SmithBrewingRate_C0_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_49" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_50" href="https://rotool.gungho.jp/torihiki/index.php?item=1516&make_flag=1&world=15" target="_blank">ソードメイス</a></td>
+								<td id="p_SmithBrewingRate_C0_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_50" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP0_51" href="https://rotool.gungho.jp/torihiki/index.php?item=1522&make_flag=1&world=15" target="_blank">スタナー</a></td>
+								<td id="p_SmithBrewingRate_C0_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C0_51" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション1個 -->
+				<div id="smithMaceTabs-OP1">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>1:火</th>
+								<th>1:原価(Zeny)</th>
+								<th>2:水</th>
+								<th>2:原価(Zeny)</th>
+								<th>3:風</th>
+								<th>3:原価(Zeny)</th>
+								<th>4:地</th>
+								<th>4:原価(Zeny)</th>
+								<th>5:★</th>
+								<th>5:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_44" href="https://rotool.gungho.jp/torihiki/index.php?item=1501&make_flag=1&world=15" target="_blank">クラブ</a></td>
+								<td id="p_SmithBrewingRate_C1_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_44" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_45" href="https://rotool.gungho.jp/torihiki/index.php?item=1504&make_flag=1&world=15" target="_blank">メイス</a></td>
+								<td id="p_SmithBrewingRate_C1_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_45" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_46" href="https://rotool.gungho.jp/torihiki/index.php?item=1507&make_flag=1&world=15" target="_blank">スマッシャー</a></td>
+								<td id="p_SmithBrewingRate_C1_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_46" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_47" href="https://rotool.gungho.jp/torihiki/index.php?item=1510&make_flag=1&world=15" target="_blank">フレイル</a></td>
+								<td id="p_SmithBrewingRate_C1_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_47" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_48" href="https://rotool.gungho.jp/torihiki/index.php?item=1519&make_flag=1&world=15" target="_blank">チェイン</a></td>
+								<td id="p_SmithBrewingRate_C1_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_48" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_49" href="https://rotool.gungho.jp/torihiki/index.php?item=1513&make_flag=1&world=15" target="_blank">モーニングスター</a></td>
+								<td id="p_SmithBrewingRate_C1_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_49" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_50" href="https://rotool.gungho.jp/torihiki/index.php?item=1516&make_flag=1&world=15" target="_blank">ソードメイス</a></td>
+								<td id="p_SmithBrewingRate_C1_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_50" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP1_51" href="https://rotool.gungho.jp/torihiki/index.php?item=1522&make_flag=1&world=15" target="_blank">スタナー</a></td>
+								<td id="p_SmithBrewingRate_C1_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C1_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C2_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C2_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C3_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C3_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C4_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C4_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C5_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C5_51" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション2個 -->
+				<div id="smithMaceTabs-OP2">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>6:火★</th>
+								<th>6:原価(Zeny)</th>
+								<th>7:水★</th>
+								<th>7:原価(Zeny)</th>
+								<th>8:風★</th>
+								<th>8:原価(Zeny)</th>
+								<th>9:地★</th>
+								<th>9:原価(Zeny)</th>
+								<th>10:★★</th>
+								<th>10:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_44" href="https://rotool.gungho.jp/torihiki/index.php?item=1501&make_flag=1&world=15" target="_blank">クラブ</a></td>
+								<td id="p_SmithBrewingRate_C6_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_44" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_45" href="https://rotool.gungho.jp/torihiki/index.php?item=1504&make_flag=1&world=15" target="_blank">メイス</a></td>
+								<td id="p_SmithBrewingRate_C6_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_45" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_46" href="https://rotool.gungho.jp/torihiki/index.php?item=1507&make_flag=1&world=15" target="_blank">スマッシャー</a></td>
+								<td id="p_SmithBrewingRate_C6_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_46" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_47" href="https://rotool.gungho.jp/torihiki/index.php?item=1510&make_flag=1&world=15" target="_blank">フレイル</a></td>
+								<td id="p_SmithBrewingRate_C6_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_47" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_48" href="https://rotool.gungho.jp/torihiki/index.php?item=1519&make_flag=1&world=15" target="_blank">チェイン</a></td>
+								<td id="p_SmithBrewingRate_C6_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_48" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_49" href="https://rotool.gungho.jp/torihiki/index.php?item=1513&make_flag=1&world=15" target="_blank">モーニングスター</a></td>
+								<td id="p_SmithBrewingRate_C6_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_49" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_50" href="https://rotool.gungho.jp/torihiki/index.php?item=1516&make_flag=1&world=15" target="_blank">ソードメイス</a></td>
+								<td id="p_SmithBrewingRate_C6_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_50" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP2_51" href="https://rotool.gungho.jp/torihiki/index.php?item=1522&make_flag=1&world=15" target="_blank">スタナー</a></td>
+								<td id="p_SmithBrewingRate_C6_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C6_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C7_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C7_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C8_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C8_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C9_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C9_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C10_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C10_51" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- オプション3個 -->
+				<div id="smithMaceTabs-OP3">
+					<table>
+						<thead>
+							<tr>
+								<th>アイテム</th>
+								<th>11:火★★</th>
+								<th>11:原価(Zeny)</th>
+								<th>12:水★★</th>
+								<th>12:原価(Zeny)</th>
+								<th>13:風★★</th>
+								<th>13:原価(Zeny)</th>
+								<th>14:地★★</th>
+								<th>14:原価(Zeny)</th>
+								<th>15:★★★</th>
+								<th>15:原価(Zeny)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_44" href="https://rotool.gungho.jp/torihiki/index.php?item=1501&make_flag=1&world=15" target="_blank">クラブ</a></td>
+								<td id="p_SmithBrewingRate_C11_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_44" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_44" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_44" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_45" href="https://rotool.gungho.jp/torihiki/index.php?item=1504&make_flag=1&world=15" target="_blank">メイス</a></td>
+								<td id="p_SmithBrewingRate_C11_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_45" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_45" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_45" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_46" href="https://rotool.gungho.jp/torihiki/index.php?item=1507&make_flag=1&world=15" target="_blank">スマッシャー</a></td>
+								<td id="p_SmithBrewingRate_C11_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_46" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_46" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_46" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_47" href="https://rotool.gungho.jp/torihiki/index.php?item=1510&make_flag=1&world=15" target="_blank">フレイル</a></td>
+								<td id="p_SmithBrewingRate_C11_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_47" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_47" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_47" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_48" href="https://rotool.gungho.jp/torihiki/index.php?item=1519&make_flag=1&world=15" target="_blank">チェイン</a></td>
+								<td id="p_SmithBrewingRate_C11_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_48" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_48" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_48" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_49" href="https://rotool.gungho.jp/torihiki/index.php?item=1513&make_flag=1&world=15" target="_blank">モーニングスター</a></td>
+								<td id="p_SmithBrewingRate_C11_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_49" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_49" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_49" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_50" href="https://rotool.gungho.jp/torihiki/index.php?item=1516&make_flag=1&world=15" target="_blank">ソードメイス</a></td>
+								<td id="p_SmithBrewingRate_C11_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_50" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_50" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_50" class="numeric">-</td>
+							</tr>
+							<tr>
+								<td class="identify"><a id="p_SmithItemName_OP3_51" href="https://rotool.gungho.jp/torihiki/index.php?item=1522&make_flag=1&world=15" target="_blank">スタナー</a></td>
+								<td id="p_SmithBrewingRate_C11_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C11_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C12_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C12_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C13_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C13_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C14_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C14_51" class="numeric">-</td>
+								<td id="p_SmithBrewingRate_C15_51" class="numeric">-</td>
+								<td id="p_SmithItemCost_C15_51" class="numeric">-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [45 ＋ (メイス製作Lv × 5) ＋ (武器研究Lv) ＋ (金敷補正) ＋ IF(メカニック ? 4 ： 0) ＋ (JobLv × 0.2) ＋ (DEX × 0.1) ＋ (LUK × 0.1) ＋ (15 － 武器Lv × 15) － (属性石個数 × 25) － (星のかけら個数 × 15) ＋ Random[-5,5]]%</div>
+		</div>
+
+		<!-- 原価 タブ -->
+		<div id="mainTabs-Cost">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>価格(Zeny)</th>
+						<th>アイテム</th>
+						<th>価格(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=612" target="_blank">携帯用溶鉱炉</a></td><td><input id="p_Cost_0" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=613" target="_blank">鋼鉄の金槌</a></td><td><input id="p_Cost_1" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=614" target="_blank">黄金の金槌</a></td><td><input id="p_Cost_2" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=615" target="_blank">オリデオコンの金槌</a></td><td><input id="p_Cost_3" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1002&world=15" target="_blank">鉄鉱石</a></td><td><input id="p_Cost_4" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=998&world=15" target="_blank">鉄</a></td><td><input id="p_Cost_5" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=999&world=15" target="_blank">鋼鉄</a></td><td><input id="p_Cost_6" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1003&world=15" target="_blank">石炭</a></td><td><input id="p_Cost_7" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=990&world=15" target="_blank">レッドブラッド</a></td><td><input id="p_Cost_8" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=994&world=15" target="_blank">フレイムハート</a></td><td><input id="p_Cost_9" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=991&world=15" target="_blank">クリスタルブルー</a></td><td><input id="p_Cost_10" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=995&world=15" target="_blank">ミスティックフローズン</a></td><td><input id="p_Cost_11" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=992&world=15" target="_blank">ウィンドオブヴェルデュール</a></td><td><input id="p_Cost_12" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=996&world=15" target="_blank">ラフウィンド</a></td><td><input id="p_Cost_13" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=993&world=15" target="_blank">イエローライブ</a></td><td><input id="p_Cost_14" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=997&world=15" target="_blank">グレイトネイチャ</a></td><td><input id="p_Cost_15" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1001&world=15" target="_blank">星の粉</a></td><td><input id="p_Cost_16" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=1000&world=15" target="_blank">星のかけら</a></td><td><input id="p_Cost_17" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=984&world=15" target="_blank">オリデオコン</a></td><td><input id="p_Cost_18" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=720&world=15" target="_blank">アクアマリン</a></td><td><input id="p_Cost_19" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=923&world=15" target="_blank">悪魔の角</a></td><td><input id="p_Cost_20" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=719&world=15" target="_blank">アメジスト</a></td><td><input id="p_Cost_21" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=920&world=15" target="_blank">狼の爪</a></td><td><input id="p_Cost_22" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=727&world=15" target="_blank">オパール</a></td><td><input id="p_Cost_23" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=922&world=15" target="_blank">オークの牙</a></td><td><input id="p_Cost_24" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=968&world=15" target="_blank">オーク勇者の証</a></td><td><input id="p_Cost_25" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=718&world=15" target="_blank">ガーネット</a></td><td><input id="p_Cost_26" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=913&world=15" target="_blank">こうもりの牙</a></td><td><input id="p_Cost_27" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=726" target="_blank">サファイア</a></td><td><input id="p_Cost_28" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=722&world=15" target="_blank">真珠</a></td><td><input id="p_Cost_29" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=729" target="_blank">ジルコン</a></td><td><input id="p_Cost_30" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=963&world=15" target="_blank">鋭い鱗</a></td><td><input id="p_Cost_31" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=909&world=15" target="_blank">ゼロピー</a></td><td><input id="p_Cost_32" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=733&world=15" target="_blank">損傷したダイヤモンド</a></td><td><input id="p_Cost_33" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=730" target="_blank">ダイヤモンド1カラット</a></td><td><input id="p_Cost_34" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=728" target="_blank">トパーズ</a></td><td><input id="p_Cost_35" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=724&world=15" target="_blank">呪われたルビー</a></td><td><input id="p_Cost_36" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=958&world=15" target="_blank">亡者の牙</a></td><td><input id="p_Cost_37" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=957&world=15" target="_blank">亡者の爪</a></td><td><input id="p_Cost_38" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=723" target="_blank">ルビー</a></td><td><input id="p_Cost_39" class="numeric"/></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>価格の初期値について</h3>
+			<ul>
+				<li>背景色が緑のものはNPC購入可能アイテム(参考: <a href="https://roween.lies.jp/" target="_blank">Roween</a>)で、
+					ディスカウント可能なものは初期値をディスカウントLv10(-24%)による価格としています。</li>
+					NPC購入不可アイテムの初期値は、<a href="https://rotool.gungho.jp/torihiki/" target="_blank">RO公式ツール・露店取引情報</a>
+					2019/05/25 Breidablikワールド中央値、または取引履歴がないものはオーバーチャージLv10(+24%)による価格としています。
+			</ul>
+		</div>
+
+		<!-- About タブ -->
+		<div id="mainTabs-About">
+			<div align="right"><button id="resetButton">入力内容をリセット</button></div>
+
+			<h3>このツールについて</h3>
+			<p>
+				Ragnarok Online(RO)のブラックスミス系列の製造をまとめたものです。<br/>
+				計算式の元ネタは<a href="http://rrenewal-ro.daa.jp/" target="_blank">Ragna-Promenade</a>。<br/>
+				アイテムIDを調査するために検索を行っていたところ、2019/05/25現在 <a href="https://rotool.gungho.jp/torihiki/" target="_blank">RO公式ツール・露店取引情報</a>で以下のバグを確認しています。
+				<ul>
+					<li>
+						ブレイド[製造]が2つ存在する<br/>
+						<a href="https://rotool.gungho.jp/torihiki/index.php?item=1107&make_flag=1&world=15" target="_blank">ブレイド[製造]</a> ← make_flag=0にするとブレイド[3]が出るので間違い<br/>
+						<a href="https://rotool.gungho.jp/torihiki/index.php?item=1109&make_flag=1&world=15" target="_blank">ブレイド[製造]</a>
+					</li>
+					<li><a href="https://rotool.gungho.jp/torihiki/index.php?item=1112&make_flag=1&world=15" target="_blank">レイピア[製造]</a>が存在しない</li>
+				</ul>
+			</p>
+
+			<h3>参考</h3>
+			<ul>
+				<li><a href="http://rrenewal-ro.daa.jp/" target="_blank">Ragna-Promenade</a>
+					<ul>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rb_blacksmith.html#Weaponry_Research" target="_blank">武器研究</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rb_blacksmith.html#Iron_Tempering" target="_blank">鉄製造</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rb_blacksmith.html#Steel_Tempering" target="_blank">鋼鉄製造</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rb_blacksmith.html#Enchanted_Stone_Craft" target="_blank">属性石製造</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rb_blacksmith.html#Smith_Dagger" target="_blank">短剣製作</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rb_blacksmith.html#Smith_Sword" target="_blank">剣製作</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rb_blacksmith.html#Smith_Two-handed_Sword" target="_blank">両手剣製作</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rb_blacksmith.html#Smith_Spear" target="_blank">槍製作</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rb_blacksmith.html#Smith_Axe" target="_blank">斧製作</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rb_blacksmith.html#Smith_Brass_Knuckle" target="_blank">ナックル製作</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rb_blacksmith.html#Smith_Mace" target="_blank">メイス製作</a></li>
+					</ul>
+				</li>
+				<li><a href="https://roween.lies.jp/" target="_blank">Roween</a></li>
+				<li><a href="https://rotool.gungho.jp/torihiki/" target="_blank">RO公式ツール・露店取引情報</a></li>
+			</ul>
+
+			<!-- 本サイト上でない場合のみ表示 -->
+			<div id="about-Author" style="display: none;">
+				<h3>作成者</h3>
+				<p>
+					まじぽた: Breidablikワールドをメインに活動する非Gvギルド内ポタ屋。<br/>
+					昨今の転送サービスの充実やギルドメンバーの活動の分散により、ポタ屋としての出番がなくなっている。<br/>
+					ポタ屋と名乗ってはいるがメイン職はABではなく、その日の気分で色々な職のキャラを切り替える低レベルエンジョイ勢です。
+				</p>
+				<ul>
+					<li><a href="https://ro-mastodon.puyo.jp/@magipota" target="_blank">まじぽた@RO丼 - RO Mastodon</a><br/>
+						Ragnarok Onlineの話題専用のMastodonです。(頻度：高)</li>
+					<li><a href="http://magipota.blog.jp/" target="_blank">まじぽたのロングトゥート</a><br/>
+						RO丼に収まらない内容を書く時用のブログスペースです。(頻度：低)</li>
+					<li><a href="https://magipota.gozaru.jp/" target="_blank">まじぽたさんすう</a><br/>
+						ブログでも対応できない計算機の類を置いています。(頻度：低)</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

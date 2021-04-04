@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta name="author" content="まじぽた"/>
+	<meta name="description" content="Ragnarok Online(RO)のアサシンクロスおよびギロチンクロスの製造スキル(クリエイトデッドリーポイズン、新毒製造)による成功率と原価を計算します。"/>
+	<meta name="keywords" content="RO,jRO,Ragnarok Online,ラグナロクオンライン,計算機,製毒,アサシンクロス,ギロチンクロス,クリエイトデッドリーポイズン,新毒製造"/>
+	<title>RO製造計算機 - アサシン系列 - まじぽたさんすう</title>
+	<script src="external/jquery.min.js"></script>
+	<script src="external/jquery.cookie.min.js"></script>
+	<script src="external/jquery-ui.min.js"></script>
+	<script src="ROAssassin.js"></script>
+	<link href="external/jquery-ui.min.css" rel="stylesheet"/>
+	<link href="ROCreation.css" rel="stylesheet"/>
+</head>
+<body>
+	<h1>RO製造計算機 - アサシン系列</h1>
+
+	<div align="right">
+		<select id="jumpMenu">
+			<option value="ROAlchemist.html">アルケミスト系列</option>
+			<option value="ROAssassin.html" selected="selected">アサシン系列</option>
+			<option value="ROKnight.html">ナイト系列</option>
+			<option value="ROBlacksmith.html">ブラックスミス系列</option>
+			<option value="ROCooking.html">料理</option>
+		</select>
+		<a id="to-Top" href="https://magipota.gozaru.jp/">トップに戻る</a>
+	</div>
+
+	<div><button id="saveButton">入力内容を保存</button></div>
+	<div id="mainTabs">
+		<ul>
+			<li><a href="#mainTabs-Param">パラメータ</a></li>
+			<li><a href="#mainTabs-CreateDeadlyPoison">クリエイトデッドリーポイズン</a></li>
+			<li><a href="#mainTabs-CreateNewPoison">新毒製造</a></li>
+			<li><a href="#mainTabs-Cost">原価</a></li>
+			<li><a href="#mainTabs-About">About</a></li>
+		</ul>
+
+		<!-- パラメータ タブ -->
+		<div id="mainTabs-Param">
+			<table>
+				<thead>
+					<tr>
+						<th>項目</th>
+						<th>基本</th>
+						<th>補正</th>
+					</tr>
+				<thead>
+				<tbody>
+					<tr>
+						<td class="identify">JobLv</td>
+						<td><input id="p_JobLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">DEX</td>
+						<td><input id="p_BaseDEX" class="numeric"/></td>
+						<td>＋ <input id="p_AddDEX" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify">LUK</td>
+						<td><input id="p_BaseLUK" class="numeric"/></td>
+						<td>＋ <input id="p_AddLUK" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify">クリエイトデッドリーポイズン</td>
+						<td><input id="p_CreateDeadlyPoisonLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">新毒研究</td>
+						<td><input id="p_ResearhNewPoisonLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">新毒製造</td>
+						<td><input id="p_CreateNewPoisonLv" class="numeric"/></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class="identify">ワールド</td>
+						<td>
+							<select id="p_World">
+								<option value="1">Sigrun</option>
+								<option value="2">Alvitr</option>
+								<option value="3">Vali</option>
+								<option value="4">Trudr</option>
+								<option value="5">Radgrid</option>
+								<option value="6">Olrun</option>
+								<option value="7">Gimle</option>
+								<option value="8">Hervor</option>
+								<option value="9">Idavoll</option>
+								<option value="10">Frigg</option>
+								<option value="11">Mimir</option>
+								<option value="12">Lif</option>
+								<option value="13">Breidablik</option>
+								<option value="14">Urdr</option>
+								<option value="15">Noatun</option>
+							</select>
+						</td>
+						<td>← アイテム名リンク用</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- クリエイトデッドリーポイズン タブ -->
+		<div id="mainTabs-CreateDeadlyPoison">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>成功率(%)</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_CreateDeadlyPoisonItemName_0" href="https://rotool.gungho.jp/torihiki/index.php?item=678&world=15" target="_blank">毒薬の瓶</a></td>
+						<td id="p_CreateDeadlyPoisonBrewingRate_0" class="numeric">-</td>
+						<td id="p_CreateDeadlyPoisonCost_0"        class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>[20 ＋ (DEX × 0.4) ＋ (LUK × 0.2)]%</div>
+		</div>
+
+		<!-- 新毒製造 タブ -->
+		<div id="mainTabs-CreateNewPoison">
+			<h3>成功率</h3>
+			<!-- 分解能は他と合わせるため廃止 -->
+			<input type="hidden" id="p_CreateNewPoisionRandomResolution" value="100"/>
+			<table>
+				<thead>
+					<tr>
+						<th>成功率(%)</th>
+						<th>平均(個)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td id="p_CreateNewPoisonBrewingRate" class="numeric">-</td>
+						<td id="p_CreateNewPoisonAverageCount" class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>原価(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a id="p_CreateNewPoisonItemName_0" href="https://rotool.gungho.jp/torihiki/index.php?item=12717&world=15" target="_blank">パラライズ</a></td>
+						<td id="p_CreateNewPoisonCost_0" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CreateNewPoisonItemName_1" href="https://rotool.gungho.jp/torihiki/index.php?item=12722&world=15" target="_blank">パイクレシア</a></td>
+						<td id="p_CreateNewPoisonCost_1" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CreateNewPoisonItemName_2" href="https://rotool.gungho.jp/torihiki/index.php?item=12720&world=15" target="_blank">デスハート</a></td>
+						<td id="p_CreateNewPoisonCost_2" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CreateNewPoisonItemName_3" href="https://rotool.gungho.jp/torihiki/index.php?item=12718&world=15" target="_blank">リーチエンド</a></td>
+						<td id="p_CreateNewPoisonCost_3" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CreateNewPoisonItemName_4" href="https://rotool.gungho.jp/torihiki/index.php?item=6128&world=15" target="_blank">解毒剤</a></td>
+						<td id="p_CreateNewPoisonCost_4" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CreateNewPoisonItemName_5" href="https://rotool.gungho.jp/torihiki/index.php?item=12724&world=15" target="_blank">ベナムブリード</a></td>
+						<td id="p_CreateNewPoisonCost_5" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CreateNewPoisonItemName_6" href="https://rotool.gungho.jp/torihiki/index.php?item=12723&world=15" target="_blank">マジックマッシュルーム</a></td>
+						<td id="p_CreateNewPoisonCost_6" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CreateNewPoisonItemName_7" href="https://rotool.gungho.jp/torihiki/index.php?item=12721&world=15" target="_blank">トキシン</a></td>
+						<td id="p_CreateNewPoisonCost_7" class="numeric">-</td>
+					</tr>
+					<tr>
+						<td class="identify"><a id="p_CreateNewPoisonItemName_8" href="https://rotool.gungho.jp/torihiki/index.php?item=12719&world=15" target="_blank">オブリビオンカース</a></td>
+						<td id="p_CreateNewPoisonCost_8" class="numeric">-</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>計算式</h3>
+			<div>成功率 ＝ [30 ＋ (新毒研究Lv × 5) ＋ (JobLv × 0.05) ＋ (DEX × 0.05) ＋ (LUK × 0.1) ＋ Random[-5,5]]%</div>
+			<div>個数 ＝ Floor[1.5 ＋ 新毒研究Lv × 0.5] ～ Floor[4.0 ＋ 新毒研究 × 0.5]</div>
+		</div>
+
+		<!-- 原価 タブ -->
+		<div id="mainTabs-Cost">
+			<h3>アイテム一覧</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>アイテム</th>
+						<th>価格(Zeny)</th>
+						<th>アイテム</th>
+						<th>価格(Zeny)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=510&world=15" target="_blank">青ハーブ</a></td><td><input id="p_Cost_0" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=713&world=15" target="_blank">空きビン</a></td><td><input id="p_Cost_1" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7003&world=15" target="_blank">アノリアンの皮膚</a></td><td><input id="p_Cost_2" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=709&world=15" target="_blank">イジドル</a></td><td><input id="p_Cost_3" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=972&world=15" target="_blank">カルボーディル</a></td><td><input id="p_Cost_4" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7155&world=15" target="_blank">ガマ蛙の皮</a></td><td><input id="p_Cost_5" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=952&world=15" target="_blank">サボテンの針</a></td><td><input id="p_Cost_6" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=509&world=15" target="_blank">白ハーブ</a></td><td><input id="p_Cost_7" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7033&world=15" target="_blank">毒キノコの胞子</a></td><td><input id="p_Cost_8" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7931" target="_blank">毒製造キット</a></td><td><input id="p_Cost_9" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7937&world=15" target="_blank">毒草アモエナ</a></td><td><input id="p_Cost_10" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7936&world=15" target="_blank">毒草スコボリア</a></td><td><input id="p_Cost_11" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7935&world=15" target="_blank">毒草セラタム</a></td><td><input id="p_Cost_12" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7932&world=15" target="_blank">毒草ネリウム</a></td><td><input id="p_Cost_13" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7934&world=15" target="_blank">毒草マキュラータ</a></td><td><input id="p_Cost_14" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7933&world=15" target="_blank">毒草ランタナ</a></td><td><input id="p_Cost_15" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=937&world=15" target="_blank">毒の牙</a></td><td><input id="p_Cost_16" class="numeric"/></td>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=7134" target="_blank">乳鉢</a></td><td><input id="p_Cost_17" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=950&world=15" target="_blank">人魚の心臓</a></td><td><input id="p_Cost_18" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=939&world=15" target="_blank">ハチの針</a></td><td><input id="p_Cost_19" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify from_npc"><a href="https://rotool.gungho.jp/monster/item.php?item=657" target="_blank">バーサークポーション</a></td><td><input id="p_Cost_20" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=7565&world=15" target="_blank">ベトベトな毒</a></td><td><input id="p_Cost_21" class="numeric"/></td>
+					</tr>
+					<tr>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=511&world=15" target="_blank">緑ハーブ</a></td><td><input id="p_Cost_22" class="numeric"/></td>
+						<td class="identify"><a href="https://rotool.gungho.jp/torihiki/index.php?item=957&world=15" target="_blank">亡者の爪</a></td><td><input id="p_Cost_23" class="numeric"/></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>価格の初期値について</h3>
+			<ul>
+				<li>背景色が緑のものはNPC購入可能アイテム(参考: <a href="https://roween.lies.jp/" target="_blank">Roween</a>)で、
+					ディスカウント可能なものは初期値をディスカウントLv10(-24%)による価格としています。</li>
+				<li>NPC購入不可アイテムの初期値は、<a href="https://rotool.gungho.jp/torihiki/" target="_blank">RO公式ツール・露店取引情報</a>
+					2019/05/20 Breidablikワールド中央値です。</li>
+			</ul>
+		</div>
+
+		<!-- About タブ -->
+		<div id="mainTabs-About">
+			<div align="right"><button id="resetButton">入力内容をリセット</button></div>
+
+			<h3>このツールについて</h3>
+			<p>
+				Ragnarok Online(RO)のアサシン系列の製造をまとめたものです。<br/>
+				計算式の元ネタは<a href="http://rrenewal-ro.daa.jp/" target="_blank">Ragna-Promenade</a>、新毒製造については暫定とのことです。<br/>
+				新毒製造の平均成功率±5%の分解能が不明なため、この部分については入力可能としています。
+			</p>
+
+			<h3>参考</h3>
+			<ul>
+				<li><a href="http://rrenewal-ro.daa.jp/" target="_blank">Ragna-Promenade</a>
+					<ul>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rc_assassincross.html#CreateDeadlyPoison" target="_blank">クリエイトデッドリーポイズン</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rd_gltcross.html#ResearhNewPoison" target="_blank">新毒研究</a></li>
+						<li><a href="http://rrenewal-ro.daa.jp/skill_rd_gltcross.html#CreateNewPoison" target="_blank">新毒製造</a></li>
+					</ul>
+				</li>
+				<li><a href="https://roween.lies.jp/" target="_blank">Roween</a></li>
+				<li><a href="https://rotool.gungho.jp/torihiki/" target="_blank">RO公式ツール・露店取引情報</a></li>
+			</ul>
+
+			<!-- 本サイト上でない場合のみ表示 -->
+			<div id="about-Author" style="display: none;">
+				<h3>作成者</h3>
+				<p>
+					まじぽた: Breidablikワールドをメインに活動する非Gvギルド内ポタ屋。<br/>
+					昨今の転送サービスの充実やギルドメンバーの活動の分散により、ポタ屋としての出番がなくなっている。<br/>
+					ポタ屋と名乗ってはいるがメイン職はABではなく、その日の気分で色々な職のキャラを切り替える低レベルエンジョイ勢です。
+				</p>
+				<ul>
+					<li><a href="https://ro-mastodon.puyo.jp/@magipota" target="_blank">まじぽた@RO丼 - RO Mastodon</a><br/>
+						Ragnarok Onlineの話題専用のMastodonです。(頻度：高)</li>
+					<li><a href="http://magipota.blog.jp/" target="_blank">まじぽたのロングトゥート</a><br/>
+						RO丼に収まらない内容を書く時用のブログスペースです。(頻度：低)</li>
+					<li><a href="https://magipota.gozaru.jp/" target="_blank">まじぽたさんすう</a><br/>
+						ブログでも対応できない計算機の類を置いています。(頻度：低)</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

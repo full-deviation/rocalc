@@ -1,0 +1,41 @@
+table {
+	border-collapse: collapse;
+}
+
+table tr th {
+	background: #4080FF;
+}
+
+table tr td {
+	background: #80C0FF;
+}
+
+table tr td a:link, table tr td a:visited, table tr td a:hover, table tr td a:active {
+	color: darkblue;
+}
+
+table th {
+	color: white;
+	border: solid 1px white;
+	text-align: center;
+	padding: 10px 10px;
+}
+
+table td {
+	color: darkblue;
+	border: solid 1px white;
+	text-align: center;
+	padding: 10px 10px;
+}
+
+.from_npc {
+	background: #A0E0C0;
+}
+
+.identify {
+	text-align: left;
+}
+
+.numeric {
+	text-align: right;
+}
