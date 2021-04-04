@@ -148,6 +148,7 @@ $(function() {
 
 	// タブ
 	$('#mainTabs').tabs();
+	$('#exampleTabs').tabs();
 
 	// コントロールの初期化
 	initializeInputControls(true);
