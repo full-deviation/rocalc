@@ -229,6 +229,7 @@ function executeRefine() {
 	var endLevel = parseInt($('#p_EndLevel').val());
 	var refineType = $('#p_RefineType').val(); // Improved: 改良濃縮, Ultimate: 究極, Miracle: ミラクル
 	var tryCount = parseInt($('#p_TryCount').val());
+	var onlyLast = $('#p_OnlyLast').prop('checked');
 
 	// 成功率: 計算方式の関係上+11まで箱を用意する
 	var successRates = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0];
@@ -337,20 +338,22 @@ function executeRefine() {
 			if (nextRates[level] < 0) nextRates[level] = 0;
 		}
 
-		// 行を構築
-		var rowData = '<tr>';
+		if ((!onlyLast) || (tryCurrent == tryCount)) {
+			// 行を構築
+			var rowData = '<tr>';
 
-		// 回数
-		rowData += '<th class="identify">' + tryCurrent + '回目</th>';
+			// 回数
+			rowData += '<th class="identify">' + tryCurrent + '回目</th>';
 
-		// 確率
-		for (level = safeLevel; level <= maxLevel; level++) {
-			rowData += '<td>' + (parseInt(nextRates[level] * 1000000) / 10000).toFixed(2) + ' %</td>';
+			// 確率
+			for (level = safeLevel; level <= maxLevel; level++) {
+				rowData += '<td>' + (parseInt(nextRates[level] * 1000000) / 10000).toFixed(2) + ' %</td>';
+			}
+
+			rowData += '</tr>';
+
+			tbody.append(rowData);
 		}
-
-		rowData += '</tr>';
-
-		tbody.append(rowData);
 
 		// 移し替え
 		currentRates = nextRates;
