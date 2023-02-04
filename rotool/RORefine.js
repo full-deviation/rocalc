@@ -25,6 +25,16 @@ var params = {
 	rate10:	10,
 };
 
+/** 入力パラメータ未入力の場合 */
+var defaultParams = {
+	rate5:	78,
+	rate6:	50,
+	rate7:	48,
+	rate8:	23,
+	rate9:	22,
+	rate10:	10,
+};
+
 /** 記録する最小精錬値成功率 */
 var minLevel = 5;
 
@@ -91,6 +101,13 @@ function loadLocalStorage() {
 		// 精錬値別の成功率
 		for (i = minLevel; i <= maxLevel; i++) {
 			$('#p_Rate' + i).val(params['rate' + i]);
+		}
+	}
+	// 上記以外はデフォルト値を提示
+	else {
+		// 精錬値別の成功率
+		for (i = minLevel; i <= maxLevel; i++) {
+			$('#p_Rate' + i).val(defaultParams['rate' + i]);
 		}
 	}
 }
@@ -197,7 +214,7 @@ function initializeInputControls(initial = false) {
 		$('#p_RefineType').selectmenu();
 
 		// 回数
-		$('#p_TryCount').spinner({ min: 1, max: 10000});
+		$('#p_TryCount').spinner({ min: 1, max: 99999});
 
 		// 開始ボタン
 		$('#startButton').button().on('click', function() {
