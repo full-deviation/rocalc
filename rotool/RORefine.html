@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta name="author" content="まじぽた"/>
+	<meta name="description" content="Ragnarok Online(RO)の前回の状態を引き継ぐ精錬をシミュレートします。"/>
+	<meta name="keywords" content="RO,Ragnarok Online,ラグナロクオンライン,精錬,改良濃縮,究極精錬,ミラクル精錬"/>
+	<title>ROツール - 周回精錬 - まじぽたさんすう</title>
+	<script src="external/jquery.min.js"></script>
+	<script src="external/jquery.cookie.min.js"></script>
+	<script src="external/jquery-ui.min.js"></script>
+	<script src="RORefine.js"></script>
+	<link href="external/jquery-ui.min.css" rel="stylesheet"/>
+	<link href="ROTool.css" rel="stylesheet"/>
+</head>
+<body>
+	<h1>ROツール - 周回精錬</h1>
+
+	<div align="right">
+		<a id="to-Top" href="https://magipota.gozaru.jp/">トップに戻る</a>
+	</div>
+
+	<!-- ローカルストレージがサポートされていない場合のエラー -->
+	<div id="not-Supported" class="ui-widget" style="display: none;">
+		<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+			<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+			<strong>エラー:</strong> ローカルストレージがサポートされていないため、入力内容を保存できません。</p>
+		</div>
+	</div>
+
+	<div><button id="saveButton">入力内容を保存</button></div>
+	<div id="mainTabs">
+		<ul>
+			<li><a href="#mainTabs-Input">入力</a></li>
+			<li><a href="#mainTabs-Refine">精錬</a></li>
+			<li><a href="#mainTabs-About">About</a></li>
+		</ul>
+
+		<!-- 入力 タブ -->
+		<div id="mainTabs-Input">
+			<table>
+				<thead>
+					<tr><th>精錬値</th>
+						<th>成功率</th></tr>
+				<thead>
+				<tbody>
+					<tr>
+						<td class="identify">+5</td>
+						<td><input id="p_Rate5" class="numeric"/> %</td>
+					</tr>
+
+					<tr>
+						<td class="identify">+6</td>
+						<td><input id="p_Rate6" class="numeric"/> %</td>
+					</tr>
+
+					<tr>
+						<td class="identify">+7</td>
+						<td><input id="p_Rate7" class="numeric"/> %</td>
+					</tr>
+
+					<tr>
+						<td class="identify">+8</td>
+						<td><input id="p_Rate8" class="numeric"/> %</td>
+					</tr>
+
+					<tr>
+						<td class="identify">+9</td>
+						<td><input id="p_Rate9" class="numeric"/> %</td>
+					</tr>
+
+					<tr>
+						<td class="identify">+10</td>
+						<td><input id="p_Rate10" class="numeric"/> %</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>参考</h3>
+			<table>
+				<thead>
+					<tr><th>宗派</th>
+						<th>+5</th>
+						<th>+6</th>
+						<th>+7</th>
+						<th>+8</th>
+						<th>+9</th>
+						<th>+10</th>
+						<th>元ネタ</th></tr>
+				<thead>
+				<tbody>
+					<tr>
+						<td class="identify">濃縮:加算説</td>
+						<td>90%</td>
+						<td>60%</td>
+						<td>60%</td>
+						<td>30%</td>
+						<td>30%</td>
+						<td>10%</td>
+						<td><a href="http://kuman.jounin.jp/ro_calc.html" target="_blank">まったりらぐな - 精錬計算機</a></td>
+					</tr>
+
+					<tr>
+						<td class="identify">濃縮:乗算説(まったりらぐな)</td>
+						<td>78%</td>
+						<td>48%</td>
+						<td>48%</td>
+						<td>22%</td>
+						<td>22%</td>
+						<td>10%</td>
+						<td><a href="http://kuman.jounin.jp/ro_calc.html" target="_blank">まったりらぐな - 精錬計算機</a></td>
+					</tr>
+
+					<tr>
+						<td class="identify">濃縮:乗算説(VIPでRO！)</td>
+						<td>78%</td>
+						<td>50%</td>
+						<td>48%</td>
+						<td>23%</td>
+						<td>22%</td>
+						<td>10%</td>
+						<td><a href="http://rovip.info/wiki/?Guide/Refining" target="_blank">VIPでRO！本鯖編 Wiki - 装備精錬</a></td>
+					</tr>
+
+					<tr>
+						<td class="identify">濃縮:再抽選説</td>
+						<td>72%</td>
+						<td>52%</td>
+						<td>52%</td>
+						<td>28%</td>
+						<td>28%</td>
+						<td>10%</td>
+						<td><a href="http://kuman.jounin.jp/ro_calc.html" target="_blank">まったりらぐな - 精錬計算機</a></td>
+					</tr>
+
+					<tr>
+						<td class="identify">ミラクル精錬</td>
+						<td>55%</td>
+						<td>35%</td>
+						<td>10.52%</td>
+						<td>7.5%</td>
+						<td>3.25%</td>
+						<td>1.625%</td>
+						<td><a href="https://ro-blog.livedoor.biz/archives/5354035.html" target="_blank">公式ブログ</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- 精錬 タブ -->
+		<div id="mainTabs-Refine">
+
+			<h3>計算設定</h3>
+			<table>
+				<tbody>
+					<tr>
+						<td class="identify">開始精錬値</td>
+						<td>
+							<select id="p_StartLevel">
+								<option value="4">+4</option>
+								<option value="5">+5</option>
+								<option value="6">+6</option>
+								<option value="7">+7</option>
+								<option value="8">+8</option>
+								<option value="9">+9</option>
+							</select>
+						</td>
+						<td class="identify">終了精錬値</td>
+						<td>
+							<select id="p_EndLevel">
+								<option value="5">+5</option>
+								<option value="6">+6</option>
+								<option value="7" selected="selected">+7</option>
+								<option value="8">+8</option>
+								<option value="9">+9</option>
+								<option value="10">+10</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td class="identify">精錬方式</td>
+						<td>
+							<select id="p_RefineType" name="">
+								<option value="Improved">改良濃縮精錬(アビダブ)</option>
+								<option value="Ultimate">究極精錬(レイブン)</option>
+								<option value="Miracle">ミラクル精錬(イベント)</option>
+							</select>
+						</td>
+						<td class="identify">試行回数</td>
+						<td><input id="p_TryCount" class="numeric" value="100"/> 回</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<p>
+				上記の設定で
+				<button id="startButton">開始</button>
+				<button id="clearButton">クリア</button>
+			</p>
+
+			<h3>実行結果</h3>
+			<table id="p_Result">
+				<thead>
+					<tr>
+						<th>回数</th>
+						<th>+4</th>
+						<th>+5</th>
+						<th>+6</th>
+						<th>+7</th>
+						<th>+8</th>
+						<th>+9</th>
+						<th>+10</th>
+					</tr>
+				</thead>
+				<tbody id="p_ResultBody"></tbody>
+			</table>
+		</div>
+
+		<!-- About タブ -->
+		<div id="mainTabs-About">
+			<div align="right"><button id="resetButton">入力内容をリセット</button></div>
+
+			<h3>このツールについて</h3>
+			<p>
+				改良濃縮や究極精錬などの前回の状態を引き継ぐ精錬を、何回分を目安に実行すれば安心できそうかを計算します。<br/>
+				確率上は安定であってもその通りになるとは限らないことと、小数の掛け合わせをし続けると誤差が発生することに注意してください。
+			</p>
+
+			<h3>改良濃縮精錬</h3>
+			<p>
+				失敗しても装備が破壊されない代わりに精錬値が-1されます。<br/>
+				主にラグ缶でランダム排出される改良濃縮オリデオコンまたは改良濃縮エルニウムを用いて、モロクのアビダブに依頼します。
+			</p>
+
+			<h3>究極精錬</h3>
+			<p>
+				失敗しても装備が破壊されず精錬値を維持します。<br/>
+				指定された期間にラグナロクネットストアで規定の額を購入する毎に期間後に配布される究極精錬チケットを用いて、イズルードのレイブンに依頼します。
+			</p>
+
+			<h3>ミラクル精錬</h3>
+			<p>
+				失敗しても装備が破壊されない代わりに精錬値が0になります。<br/>
+				主に4～6月に季節イベントとして開催され、その期間中にイベントで依頼された内容をこなすことでポイントを貯めて、約4日に1回のミラクル精錬デーに特設マップでNPCに依頼します。<br/>
+				確率は<a href="https://ro-blog.livedoor.biz/archives/5354035.html" target="_blank">公式ブログ</a>に明示されているため、入力した確率を参照しません。
+			</p>
+
+			<!-- 本サイト上でない場合のみ表示 -->
+			<div id="about-Author" style="display: none;">
+				<h3>作成者</h3>
+				<p>
+					まじぽた: Breidablikワールドをメインに活動する非Gvギルド内ポタ屋。<br/>
+					昨今の転送サービスの充実やギルドメンバーの活動の分散により、ポタ屋としての出番がなくなっている。<br/>
+					ポタ屋と名乗ってはいるがメイン職はABではなく、その日の気分で色々な職のキャラを切り替える低レベルエンジョイ勢です。
+				</p>
+				<ul>
+					<li>
+						<a href="https://ro-mastodon.puyo.jp/@magipota" target="_blank">まじぽた@RO丼 - RO Mastodon</a><br/>
+						Ragnarok Onlineの話題専用のMastodonです。(頻度：高)
+					</li>
+					<li>
+						<a href="http://magipota.blog.jp/" target="_blank">まじぽたのロングトゥート</a><br/>
+						RO丼に収まらない内容を書く時用のブログスペースです。(頻度：低)
+					</li>
+					<li>
+						<a href="https://magipota.gozaru.jp/" target="_blank">まじぽたさんすう</a><br/>
+						ブログでも対応できない計算機の類を置いています。(頻度：低)
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
