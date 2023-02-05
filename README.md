@@ -23,4 +23,4 @@ Ragnarok Online calculators for Japanese(jRO) implementation.
     - Rune creation
   - Cooking
 - rotool
-  - Quest coverage checker (using jRO SNS)
+  - Loop refine
