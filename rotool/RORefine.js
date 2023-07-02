@@ -15,8 +15,8 @@ var cookieSettings = {
 /** ローカルストレージキー */
 var localStorageKey = "RORefine";
 
-/** 入力パラメータ */
-var params = {
+/** 入力パラメータ未入力の場合 */
+var defaultParams = {
 	rate5:	78,
 	rate6:	50,
 	rate7:	48,
@@ -25,8 +25,8 @@ var params = {
 	rate10:	10,
 };
 
-/** 入力パラメータ未入力の場合 */
-var defaultParams = {
+/** 入力パラメータ */
+var params = {
 	rate5:	78,
 	rate6:	50,
 	rate7:	48,
@@ -44,7 +44,7 @@ var maxLevel = 10;
 /** 安全な精錬値 */
 var safeLevel = 4;
 
-/** ミラクル精錬の成功率 */
+/** ミラクル精錬の成功率  +0 +1 +2 +3 +4  +5    +6    +7      +8     +9      +A      +B */
 var miracleSuccessRates = [1, 1, 1, 1, 1, 0.55, 0.35, 0.1052, 0.075, 0.0325, 0.01625, 0];
 
 /** 改行コード */
@@ -246,19 +246,16 @@ function executeRefine() {
 	var endLevel = parseInt($('#p_EndLevel').val());
 	var refineType = $('#p_RefineType').val(); // Improved: 改良濃縮, Ultimate: 究極, Miracle: ミラクル
 	var tryCount = parseInt($('#p_TryCount').val());
+	var keepStartLevel = $('#p_KeepStartLevel').prop('checked') && refineType != 'Miracle';
 	var onlyLast = $('#p_OnlyLast').prop('checked');
 
 	// 成功率: 計算方式の関係上+11まで箱を用意する
+	//                 +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B
 	var successRates = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0];
 
-	// ミラクル精錬のみ入力値の影響を受けない
-	if (refineType == 'Miracle') {
-		successRates = miracleSuccessRates;
-	}
-	else {
-		for (i = minLevel; i <= maxLevel; i++) {
-			successRates[i] = $('#p_Rate' + i).val() / 100.0;
-		}
+	// 精錬成功率
+	for (i = minLevel; i <= maxLevel; i++) {
+		successRates[i] = $('#p_Rate' + i).val() / 100.0;
 	}
 
 	// 選択結果のデバッグ表示
@@ -267,91 +264,31 @@ function executeRefine() {
 		console.debug('+' + i + ' success rate: ' + successRates[i]);
 	}
 
-	// 初期状態
+	// 初期状態        +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A
 	var currentRates = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 	currentRates[startLevel] = 1;
 
 	// 計算開始
 	for (tryCurrent = 1; tryCurrent <= tryCount; tryCurrent++) {
-		// 計算
-		var nextRates = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+		// 次の状態        +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A
+		var nextRates    = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
 		switch (refineType) {
 			case 'Improved': // 改良濃縮精錬
-				nextRates[safeLevel] = 1;
-				for (level = minLevel; level <= maxLevel; level++) {
-
-					// 終了精錬値-1未満: 前回の精錬値-1 * 精錬値+0への成功率 + 前回の精錬値+1 * (100% - 精錬値+2への成功率)
-					if (level < endLevel - 1) {
-						nextRates[level] = currentRates[level - 1] * successRates[level]
-										+ currentRates[level + 1] * (1 - successRates[level + 2]);
-					}
-					// 終了精錬値-1: 前回の精錬値-1 * 精錬値+0への成功率 ※終了精錬値から降りてこないので
-					else if (level == endLevel - 1) {
-						nextRates[level] = currentRates[level - 1] * successRates[level];
-					}
-					// 終了精錬値: 前回の精錬値-1 * 精錬値への成功率 + 前回の精錬値+0
-					else if (level == endLevel) {
-						nextRates[level] = currentRates[level - 1] * successRates[level]
-										+ currentRates[level];
-					}
-					// 上記以外: 0%
-					else {
-						nextRates[level] = 0;
-					}
-					nextRates[safeLevel] -= nextRates[level];
-				}
+				nextRates = executeImproved(currentRates, startLevel, endLevel, successRates, keepStartLevel);
 				break;
 
 			case 'Ultimate': // 究極精錬
-				nextRates[safeLevel] = 1;
-				for (level = minLevel; level <= maxLevel; level++) {
-					// 開始精錬値未満: 0%
-					if (level < startLevel) {
-						nextRates[level] = 0;
-					}
-					// 終了精錬値未満: 前回の精錬値-1 * 精錬値+0への成功率 + 前回の精錬値+0 * (100% - 精錬値+1への成功率)
-					else if (level < endLevel) {
-						nextRates[level] = currentRates[level - 1] * successRates[level]
-										 + currentRates[level] * (1 - successRates[level + 1]);
-					}
-					// 終了精錬値: 前回の精錬値-1 * 精錬値への成功率 + 前回の精錬値+0
-					else if (level == endLevel) {
-						nextRates[level] = currentRates[level - 1] * successRates[level]
-										 + currentRates[level];
-					}
-					// 上記以外: 0%
-					else {
-						nextRates[level] = 0;
-					}
-					// 安全圏から引く
-					nextRates[safeLevel] -= nextRates[level];
-				}
+				nextRates = executeUltimate(currentRates, startLevel, endLevel, successRates);
 				break;
 
 			case 'Miracle': // ミラクル精錬
-				nextRates[safeLevel] = 1;
-				for (level = minLevel; level <= maxLevel; level++) {
-					// 終了精錬値未満: 前回の精錬値-1 * 精錬値+0への成功率
-					if (level < endLevel) {
-						nextRates[level] = currentRates[level - 1] * successRates[level];
-					}
-					// 終了精錬値: 前回の精錬値-1 * 精錬値+0への成功率 + 前回の精錬値+0
-					else if (level == endLevel) {
-						nextRates[level] = currentRates[level - 1] * successRates[level]
-										 + currentRates[level];
-					}
-					// 上記以外: 0%
-					else {
-						nextRates[level] = 0;
-					}
-					// 安全圏から引く
-					nextRates[safeLevel] -= nextRates[level];
-				}
+				nextRates = executeMiracle(currentRates, startLevel, endLevel);
 				break;
 		}
 
 		// 誤差による0%未満を0%へ
-		for (level = safeLevel; level <= maxLevel; level++) {
+		for (var level = safeLevel; level <= maxLevel; level++) {
 			if (nextRates[level] < 0) nextRates[level] = 0;
 		}
 
@@ -375,4 +312,146 @@ function executeRefine() {
 		// 移し替え
 		currentRates = nextRates;
 	}
+}
+
+/**
+ * 改良濃縮精錬を実行します。
+ * @param {Array} currentRates 現在の精錬値状況。
+ * @param {number} startLevel 開始精錬値。
+ * @param {number} endLevel 終了精錬値。
+ * @param {Array} successRates 成功率。
+ * @param {boolean} keepStartLevel 開始精錬値未満を開始精錬値に補正する場合はtrue。開始精錬値を下回る場合はfalse。
+ * @returns 次の精錬値状況。
+ */
+function executeImproved(currentRates, startLevel, endLevel, successRates, keepStartLevel) {
+	// 左端
+	var leftmostLevel = keepStartLevel ? startLevel : safeLevel;
+
+	// 次の状態     +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A
+	var nextRates = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	nextRates[leftmostLevel] = 1;
+
+	// 左端は100%から各精錬値の結果を引くので含めない
+	for (level = leftmostLevel + 1; level <= maxLevel; level++) {
+		var distanceToEnd = endLevel - level;
+
+		switch (distanceToEnd) {
+			case 0: // 終了精錬値
+				// [N-1]から[N]の精錬に成功した確率 + 前回の時点で[N]だった確率
+				nextRates[level] = currentRates[level - 1] * successRates[level]
+								 + currentRates[level];
+				break;
+
+			case 1: // 終了精錬値-1
+				// [N-1]から[N]の精錬に成功した確率 ※終了精錬値から降りてこない
+				nextRates[level] = currentRates[level - 1] * successRates[level];
+				break;
+
+			default: // 上記以外
+				// 終了精錬値未満なら計算
+				if (distanceToEnd > 0) {
+					// [N-1]から[N]の精錬に成功した確率 + [N+1]から[N+2]の精錬に失敗した確率
+					nextRates[level] = currentRates[level - 1] * successRates[level]
+									 + currentRates[level + 1] * (1 - successRates[level + 2]);
+				}
+				// 終了精錬値以上なら0
+				else {
+					nextRates[level] = 0;
+				}
+				break;
+		}
+
+		// 左端から引く
+		nextRates[leftmostLevel] -= nextRates[level];
+	}
+
+	return nextRates;
+}
+
+/**
+ * 究極精錬を実行します。
+ * @param {Array} currentRates 現在の精錬値状況。
+ * @param {number} startLevel 開始精錬値。
+ * @param {number} endLevel 終了精錬値。
+ * @param {Array} successRates 成功率。
+ * @returns 次の精錬値状況。
+ */
+function executeUltimate(currentRates, startLevel, endLevel, successRates) {
+	// 左端
+	var leftmostLevel = startLevel;
+
+	// 次の状態     +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A
+	var nextRates = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	nextRates[leftmostLevel] = 1;
+
+	// 左端は100%から各精錬値の結果を引くので含めない
+	for (level = leftmostLevel + 1; level <= maxLevel; level++) {
+		var distanceToEnd = endLevel - level;
+
+		// 終了精錬値
+		if (distanceToEnd == 0) {
+			// [N-1]から[N]の精錬に成功した確率 + 前回の時点で[N]だった確率
+			nextRates[level] = currentRates[level - 1] * successRates[level]
+							 + currentRates[level];
+		}
+		// 開始精錬値以上かつ終了精錬値未満
+		else if (startLevel <= level && distanceToEnd > 0) {
+			// [N-1]から[N]の精錬に成功した確率 + [N]から[N+1]の精錬に失敗した確率
+			nextRates[level] = currentRates[level - 1] * successRates[level]
+							 + currentRates[level] * (1 - successRates[level + 1]);
+		}
+		// 開始精錬値未満または終了精錬値より大きい
+		else {
+			// 0
+			nextRates[level] = 0;
+		}
+
+		// 左端から引く
+		nextRates[leftmostLevel] -= nextRates[level];
+	}
+
+	return nextRates;
+}
+
+/**
+ * ミラクル精錬を実行します。
+ * @param {Array} currentRates 現在の精錬値状況。
+ * @param {number} startLevel 開始精錬値。
+ * @param {number} endLevel 終了精錬値。
+ * @returns 次の精錬値状況。
+ */
+function executeMiracle(currentRates, startLevel, endLevel) {
+	// 左端
+	var leftmostLevel = safeLevel;
+
+	// 次の状態     +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A
+	var nextRates = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	nextRates[leftmostLevel] = 1;
+
+	// 左端は100%から各精錬値の結果を引くので含めない
+	for (var level = leftmostLevel + 1; level <= maxLevel; level++) {
+		var distanceToEnd = endLevel - level;
+
+		// 終了精錬値
+		if (distanceToEnd == 0) {
+			// [N-1]から[N]の精錬に成功した確率 + 前回の時点で[N]だった確率
+			nextRates[level] = currentRates[level - 1] * miracleSuccessRates[level]
+							 + currentRates[level];
+		}
+		// 開始精錬値以上かつ終了精錬値未満
+		else if (startLevel <= level && distanceToEnd > 0) {
+			// [N-1]から[N]の精錬に成功した確率
+			nextRates[level] = currentRates[level - 1] * miracleSuccessRates[level];
+		}
+		// 上記以外
+		else {
+			// 0
+			nextRates[level] = 0;
+		}
+
+		// 左端から引く
+		nextRates[leftmostLevel] -= nextRates[level];
+	}
+
+	return nextRates;
 }
